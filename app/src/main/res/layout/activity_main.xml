@@ -11,7 +11,7 @@
         android:orientation="horizontal"
         android:background="#e0e0e0">
 
-        <ImageView
+        <ImageView android:id="@+id/main_previewImage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
@@ -86,11 +86,5 @@
         android:layout_weight="1"
         android:layout_marginBottom="40dp">
     </ListView>
-
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/imageView"
-        android:layout_gravity="center_horizontal" />
 
 </LinearLayout>
