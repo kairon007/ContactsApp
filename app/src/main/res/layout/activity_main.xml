@@ -38,45 +38,23 @@
 
         </LinearLayout>
 
-    </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingLeft="20dp"
+            android:orientation="vertical">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:background="#e0e0e0"
-        android:paddingBottom="5dp">
+            <ImageButton android:id="@+id/main_buttonCall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@color/button_material_dark" />
 
-        <Button android:id="@+id/main_buttonAdd"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="10dp"
-            android:padding="5dp"
-            android:text="@string/main_buttonAdd"
-            android:textSize="12dp"
-            android:textAllCaps="false" />
+            <ImageButton android:id="@+id/main_buttonText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@color/button_material_dark" />
 
-        <Button android:id="@+id/main_buttonEdit"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_marginRight="10dp"
-            android:padding="5dp"
-            android:text="@string/main_buttonEdit"
-            android:textSize="12dp"
-            android:textAllCaps="false" />
-
-        <Button android:id="@+id/main_buttonDelete"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_marginRight="20dp"
-            android:padding="5dp"
-            android:text="@string/main_buttonDelete"
-            android:textSize="12dp"
-            android:textAllCaps="false" />
+        </LinearLayout>
 
     </LinearLayout>
 

@@ -7,6 +7,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -18,7 +19,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     //Widgets
     ImageView previewImage;
     TextView previewName, previewNumber;
-    Button buttonAdd, buttonEdit, buttonDelete;
+    ImageButton buttonCall, buttonText;
     ListView contactsList;
 
 
@@ -36,14 +37,10 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
         previewNumber = (TextView)findViewById(R.id.main_previewNumber);
 
-        buttonAdd = (Button)findViewById(R.id.main_buttonAdd);
-        buttonAdd.setOnClickListener(this);
-
-        buttonEdit = (Button)findViewById(R.id.main_buttonEdit);
-        buttonEdit.setOnClickListener(this);
-
-        buttonDelete = (Button)findViewById(R.id.main_buttonDelete);
-        buttonDelete.setOnClickListener(this);
+        buttonCall = (ImageButton)findViewById(R.id.main_buttonCall);
+        buttonCall.setOnClickListener(this);
+        buttonText = (ImageButton)findViewById(R.id.main_buttonText);
+        buttonText.setOnClickListener(this);
 
         contactsList = (ListView)findViewById(R.id.main_contactsList);
     }
@@ -70,22 +67,25 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        return super.onOptionsItemSelected(item);
+        switch (item.getItemId()) {
+            case R.id.menu_addNew:
+                
+                return true;
+            case R.id.menu_edit:
+                return true;
+            case R.id.menu_delete:
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.main_buttonAdd:
+            case R.id.main_buttonCall:
                 break;
-            case R.id.main_buttonEdit:
-                break;
-            case R.id.main_buttonDelete:
+            case R.id.main_buttonText:
                 break;
         }
     }
