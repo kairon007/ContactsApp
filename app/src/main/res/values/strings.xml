@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">ContactsApp</string>
+
+    <string name="main_previewName">Select a contact</string>
+    <string name="main_buttonAdd">Add new contact</string>
+    <string name="main_buttonEdit">Edit contact</string>
+    <string name="main_buttonDelete">Delete contact</string>
+
+    <string name="action_settings">Settings</string>
+
+</resources>

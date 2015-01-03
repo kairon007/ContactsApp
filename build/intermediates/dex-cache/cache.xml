@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        jar="/Users/Jerry/AndroidStudioProjects/ContactsApp/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.3/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="81d42bf983a8741f4888a6e333e454e4a5e0eeb7">
+        <dex dex="/Users/Jerry/AndroidStudioProjects/ContactsApp/app/build/intermediates/pre-dexed/debug/classes-463219381cbcbacc186e15a7056b80ea2fddf3aa.jar" />
+    </item>
+    <item
+        jar="/Users/Jerry/Library/Android/sdk/extras/android/m2repository/com/android/support/support-annotations/21.0.3/support-annotations-21.0.3.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="4b74cefe1f0c1b819e7260c8627a14674e37fd35">
+        <dex dex="/Users/Jerry/AndroidStudioProjects/ContactsApp/app/build/intermediates/pre-dexed/debug/support-annotations-21.0.3-1fe2ecf40c50b246573abe0fb9d85d32f0d20d84.jar" />
+    </item>
+    <item
+        jar="/Users/Jerry/AndroidStudioProjects/ContactsApp/app/build/intermediates/exploded-aar/com.android.support/support-v4/21.0.3/libs/internal_impl-21.0.3.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="01ec05bfbafcc07646ba813000bf2ef11742dd03">
+        <dex dex="/Users/Jerry/AndroidStudioProjects/ContactsApp/app/build/intermediates/pre-dexed/debug/internal_impl-21.0.3-192df2cf8748e54f8eff0eaa04cdb35ee5536e97.jar" />
+    </item>
+    <item
+        jar="/Users/Jerry/AndroidStudioProjects/ContactsApp/app/build/intermediates/exploded-aar/com.android.support/support-v4/21.0.3/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="2c91c949a45a21cdecf26e03951e46c7beec9ad8">
+        <dex dex="/Users/Jerry/AndroidStudioProjects/ContactsApp/app/build/intermediates/pre-dexed/debug/classes-9f620e5d577246a94299ee5f8384419fe0fa6129.jar" />
+    </item>
+
+</items>
