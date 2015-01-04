@@ -11,7 +11,7 @@
         android:orientation="horizontal"
         android:background="#e0e0e0">
 
-        <ImageView android:id="@+id/main_previewImage"
+        <ImageView android:id="@+id/main_previewPhoto"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
@@ -19,7 +19,7 @@
 
         <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <TextView android:id="@+id/main_previewName"
@@ -30,10 +30,18 @@
                 android:textSize="20dp" />
 
             <TextView android:id="@+id/main_previewNumber"
-                android:text="Number"
+                android:text="@string/main_previewNumber"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
+                android:textSize="14dp" />
+
+            <TextView android:id="@+id/main_previewEmail"
+                android:text="@string/main_previewEmail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="10dp"
                 android:textSize="14dp" />
 
         </LinearLayout>
@@ -58,11 +66,12 @@
 
     </LinearLayout>
 
-    <ListView android:id="@+id/main_contactsList"
+    <ExpandableListView android:id="@+id/main_contactsList"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:layout_marginBottom="40dp">
-    </ListView>
+        android:layout_marginBottom="40dp"
+        android:choiceMode="singleChoice">
+    </ExpandableListView>
 
 </LinearLayout>

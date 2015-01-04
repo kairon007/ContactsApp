@@ -1,12 +1,17 @@
 package com.jerryfeng.contactsapp;
 
+import android.content.Intent;
+import android.provider.ContactsContract;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ExpandableListView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -14,13 +19,18 @@ import android.widget.TextView;
 
 import org.w3c.dom.Text;
 
-public class MainActivity extends ActionBarActivity implements View.OnClickListener {
+import java.util.ArrayList;
+
+public class MainActivity extends ActionBarActivity implements View.OnClickListener, ExpandableListView.OnGroupClickListener {
 
     //Widgets
-    ImageView previewImage;
-    TextView previewName, previewNumber;
+    ImageView previewPhoto;
+    TextView previewName, previewNumber, previewEmail;
     ImageButton buttonCall, buttonText;
-    ListView contactsList;
+
+    ExpandableListView contactsListView;
+    ExpandableListAdapter contactsAdapter;
+    ArrayList<Contact> contactsList;
 
 
     //Saving activity states for change in screen config etc.
@@ -34,15 +44,29 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         //Instantiating components
 
         previewName = (TextView)findViewById(R.id.main_previewName);
-
         previewNumber = (TextView)findViewById(R.id.main_previewNumber);
+        previewEmail = (TextView)findViewById(R.id.main_previewEmail);
 
         buttonCall = (ImageButton)findViewById(R.id.main_buttonCall);
         buttonCall.setOnClickListener(this);
         buttonText = (ImageButton)findViewById(R.id.main_buttonText);
         buttonText.setOnClickListener(this);
 
-        contactsList = (ListView)findViewById(R.id.main_contactsList);
+        contactsListView = (ExpandableListView)findViewById(R.id.main_contactsList);
+        initContactList();
+        contactsAdapter = new ExpandableListAdapter(this, contactsList);
+        contactsListView.setAdapter(contactsAdapter);
+        contactsListView.setOnGroupClickListener(this);
+    }
+
+    private void initContactList() {
+        contactsList = new ArrayList<Contact>();
+        Contact sampleContact = new Contact();
+        sampleContact.photoSrc="";
+        sampleContact.name="John Smith";
+        sampleContact.number="519 000 0000";
+        sampleContact.email="johnsmith@gmail.com";
+        contactsList.add(sampleContact);
     }
 
     @Override
@@ -69,7 +93,9 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_addNew:
-                
+                Intent intentAddNew = new Intent(this, AddNewActivity.class);
+                intentAddNew.setAction(Intent.ACTION_VIEW);
+                startActivity(intentAddNew);
                 return true;
             case R.id.menu_edit:
                 return true;
@@ -88,5 +114,21 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
             case R.id.main_buttonText:
                 break;
         }
+    }
+
+    @Override
+    public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
+        if (parent.isGroupExpanded(groupPosition)) {
+            previewName.setText(R.string.main_previewName);
+            previewNumber.setText(R.string.main_previewNumber);
+            previewEmail.setText(R.string.main_previewEmail);
+        }
+        else {
+            previewName.setText(contactsList.get(groupPosition).name);
+            previewNumber.setText(contactsList.get(groupPosition).number);
+            previewEmail.setText(contactsList.get(groupPosition).email);
+        }
+
+        return false;
     }
 }

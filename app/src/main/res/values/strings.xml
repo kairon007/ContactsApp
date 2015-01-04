@@ -2,11 +2,15 @@
 <resources>
 
     <string name="app_name">ContactsApp</string>
-
     <string name="main_previewName">Select a contact</string>
+    <string name="main_previewNumber">Phone number</string>
+    <string name="main_previewEmail">Email address</string>
 
     <string name="menu_addNew">Add new contact</string>
     <string name="menu_edit">Edit contact</string>
     <string name="menu_delete">Delete contact</string>
+
+    <string name="title_activity_add_new">AddNewActivity</string>
+    <string name="menu_save">Save contact</string>
 
 </resources>
