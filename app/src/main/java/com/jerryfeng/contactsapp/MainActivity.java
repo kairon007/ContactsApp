@@ -5,11 +5,13 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -22,7 +24,6 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     //Widgets
     ImageView previewPhoto;
     TextView previewName;
-    ImageButton buttonCall, buttonText;
 
     ExpandableListView contactsListView;
     ExpandableListAdapter contactsAdapter;
@@ -43,18 +44,13 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         //Instantiating components
 
         previewName = (TextView)findViewById(R.id.main_previewName);
-        /*
-        buttonCall = (ImageButton)findViewById(R.id.main_buttonCall);
-        buttonCall.setOnClickListener(this);
-        buttonText = (ImageButton)findViewById(R.id.main_buttonText);
-        buttonText.setOnClickListener(this);*/
 
         contactsListView = (ExpandableListView)findViewById(R.id.main_contactsList);
         contactsList = new ArrayList<Contact>();
         contactsListView.setOnGroupExpandListener(this);
         contactsListView.setOnGroupCollapseListener(this);
         prevSelectedGroup = -1;
-        //loadContactList();
+
 
     }
 
@@ -161,9 +157,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
 
-        }
     }
 
     @Override

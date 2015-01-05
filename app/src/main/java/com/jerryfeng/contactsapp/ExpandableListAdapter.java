@@ -1,25 +1,30 @@
 package com.jerryfeng.contactsapp;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.Button;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 
 /**
- * Created by Jerry on 2015-01-04.
+ * Custom adapter for ExpandableListView
  */
-public class ExpandableListAdapter extends BaseExpandableListAdapter {
+public class ExpandableListAdapter extends BaseExpandableListAdapter implements View.OnClickListener {
 
     private ArrayList<Contact> contactsList;
     private Context context;
+    int selectedGroup;
 
     public ExpandableListAdapter(Context context, ArrayList<Contact> list) {
         this.context = context;
         this.contactsList = (ArrayList<Contact>)list.clone();
+        this.selectedGroup = -1;
     }
 
     @Override
@@ -70,6 +75,8 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
             LayoutInflater inflater = (LayoutInflater)this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(R.layout.list_group, null);
         }
+
+        //Instantiate components
         TextView groupHeaderView = (TextView)convertView.findViewById(R.id.list_group_textview);
         groupHeaderView.setText(this.contactsList.get(groupPosition).name);
 
@@ -82,6 +89,8 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
             LayoutInflater inflater = (LayoutInflater)this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(R.layout.list_item, null);
         }
+
+        //Instantiate components
         TextView childNameView = (TextView)convertView.findViewById(R.id.list_item_name);
         childNameView.setText(this.contactsList.get(groupPosition).name);
 
@@ -91,11 +100,40 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         TextView childEmailView = (TextView)convertView.findViewById(R.id.list_item_email);
         childEmailView.setText(this.contactsList.get(groupPosition).email);
 
+        Button buttonCall = (Button)convertView.findViewById(R.id.list_buttonCall);
+        buttonCall.setOnClickListener(this);
+
+        Button buttonText = (Button)convertView.findViewById(R.id.list_buttonText);
+        buttonText.setOnClickListener(this);
+
+        //Update currently selected group position
+        this.selectedGroup = groupPosition;
+
         return convertView;
     }
 
     @Override
     public boolean isChildSelectable(int groupPosition, int childPosition) {
         return true;
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.list_buttonCall:
+                Intent intentCall = new Intent(Intent.ACTION_DIAL);
+                intentCall.setData(Uri.parse("tel:" + this.contactsList.get(selectedGroup).number));
+                if (intentCall.resolveActivity(context.getPackageManager()) != null) {
+                    context.startActivity(intentCall);
+                }
+                break;
+            case R.id.list_buttonText:
+                Intent intentText = new Intent(Intent.ACTION_SENDTO);
+                intentText.setData(Uri.parse("smsto:" + this.contactsList.get(selectedGroup).number));
+                if (intentText.resolveActivity(context.getPackageManager()) != null) {
+                    context.startActivity(intentText);
+                }
+                break;
+        }
     }
 }

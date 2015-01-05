@@ -9,6 +9,9 @@
     <string name="menu_edit">Edit contact</string>
     <string name="menu_delete">Delete contact</string>
 
+    <string name="button_call">Call</string>
+    <string name="button_text">SMS</string>
+
     <string name="title_activity_add_new">AddNewActivity</string>
     <string name="menu_save">Save contact</string>
     <string name="hint_name">Name</string>
