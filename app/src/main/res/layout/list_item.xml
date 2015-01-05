@@ -4,51 +4,78 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <ImageView android:id="@+id/list_item_image"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp"
-        android:src="@drawable/ic_launcher" />
+        android:orientation="vertical">
+
+        <ImageView android:id="@+id/list_item_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="20dp"
+            android:src="@drawable/ic_launcher" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:orientation="horizontal">
+
+            <Button android:id="@+id/list_buttonCall"
+                android:layout_width="@dimen/abc_action_button_min_width_material"
+                android:layout_height="@dimen/abc_action_button_min_height_material"
+                android:layout_marginEnd="10dp"
+                android:layout_marginRight="10dp"
+                android:text="@string/button_call"
+                android:textSize="14sp"
+                android:textAllCaps="false"
+                android:padding="0dp" />
+
+            <Button android:id="@+id/list_buttonText"
+                android:layout_width="@dimen/abc_action_button_min_width_material"
+                android:layout_height="@dimen/abc_action_button_min_height_material"
+                android:text="@string/button_text"
+                android:textSize="14sp"
+                android:textAllCaps="false"
+                android:padding="0dp" />
+
+        </LinearLayout>
+
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="0dp"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:padding="10dp"
+        android:paddingTop="20dp"
+        android:paddingBottom="20dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
         android:orientation="vertical">
 
         <TextView android:id="@+id/list_item_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Name" />
+            android:layout_marginBottom="10dp"
+            android:text=""
+            android:textSize="14sp"/>
 
         <TextView android:id="@+id/list_item_number"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Number" />
+            android:layout_marginBottom="10dp"
+            android:text=""
+            android:textSize="14sp"/>
 
         <TextView android:id="@+id/list_item_email"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Email" />
+            android:text=""
+            android:textSize="14sp"/>
 
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
 
-        <ImageButton android:id="@+id/main_buttonCall"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@color/button_material_dark" />
-
-        <ImageButton android:id="@+id/main_buttonText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@color/button_material_dark" />
-
-    </LinearLayout>
 
 </LinearLayout>
