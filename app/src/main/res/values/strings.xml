@@ -3,7 +3,7 @@
 
     <string name="app_name">ContactsApp</string>
 
-    <string name="main_previewName">Select a contact</string>
+    <string name="title_activity_main">Contacts</string>
 
     <string name="menu_addNew">Add new contact</string>
     <string name="menu_edit">Edit contact</string>

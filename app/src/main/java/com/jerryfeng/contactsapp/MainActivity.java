@@ -22,8 +22,6 @@ import java.util.ArrayList;
 public class MainActivity extends ActionBarActivity implements View.OnClickListener, ExpandableListView.OnGroupExpandListener, ExpandableListView.OnGroupCollapseListener {
 
     //Widgets
-    ImageView previewPhoto;
-    TextView previewName;
 
     ExpandableListView contactsListView;
     ExpandableListAdapter contactsAdapter;
@@ -42,8 +40,6 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
 
         //Instantiating components
-
-        previewName = (TextView)findViewById(R.id.main_previewName);
 
         contactsListView = (ExpandableListView)findViewById(R.id.main_contactsList);
         contactsList = new ArrayList<Contact>();

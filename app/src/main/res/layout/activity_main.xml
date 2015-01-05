@@ -11,26 +11,12 @@
         android:orientation="horizontal"
         android:background="#e0e0e0">
 
-        <ImageView android:id="@+id/main_previewPhoto"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="20dp"
-            android:src="@drawable/ic_launcher" />
-
-        <TextView android:id="@+id/main_previewName"
-            android:text="@string/main_previewName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:textSize="20sp" />
-
     </LinearLayout>
 
     <ExpandableListView android:id="@+id/main_contactsList"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:layout_marginBottom="40dp"
         android:choiceMode="singleChoice">
     </ExpandableListView>
 
