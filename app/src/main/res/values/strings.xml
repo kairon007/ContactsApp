@@ -2,9 +2,8 @@
 <resources>
 
     <string name="app_name">ContactsApp</string>
+
     <string name="main_previewName">Select a contact</string>
-    <string name="main_previewNumber">Phone number</string>
-    <string name="main_previewEmail">Email address</string>
 
     <string name="menu_addNew">Add new contact</string>
     <string name="menu_edit">Edit contact</string>
@@ -12,7 +11,6 @@
 
     <string name="title_activity_add_new">AddNewActivity</string>
     <string name="menu_save">Save contact</string>
-
     <string name="hint_name">Name</string>
     <string name="hint_number">Phone number</string>
     <string name="hint_email">Email address</string>
@@ -23,5 +21,12 @@
     <string name="pref_contactNumber">contactNumber</string>
     <string name="pref_contactEmail">contactEmail</string>
     <string name="pref_contactImage">contactImage</string>
+
+    <string name="title_activity_edit">EditActivity</string>
+    <string name="extra_listposition">com.jerryfeng.extraListPosition</string>
+    <string name="extra_name">com.jerryfeng.extraName</string>
+    <string name="extra_number">com.jerryfeng.extraNumber</string>
+    <string name="extra_email">com.jerryfeng.extraEmail</string>
+    <string name="extra_image">com.jerryfeng.extraImage</string>
 
 </resources>
