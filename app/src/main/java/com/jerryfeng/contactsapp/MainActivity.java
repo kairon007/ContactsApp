@@ -1,5 +1,6 @@
 package com.jerryfeng.contactsapp;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.provider.ContactsContract;
 import android.support.v7.app.ActionBarActivity;
@@ -98,8 +99,13 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                 startActivity(intentAddNew);
                 return true;
             case R.id.menu_edit:
+
                 return true;
             case R.id.menu_delete:
+                //if (contactsListView)
+                AlertDialog.Builder alertDelete = new AlertDialog.Builder(this);
+                alertDelete.setTitle("Delete contact");
+
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -118,6 +124,8 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
     @Override
     public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
+        //Log.d("ContactsApp", parent + "");
+
         if (parent.isGroupExpanded(groupPosition)) {
             previewName.setText(R.string.main_previewName);
             previewNumber.setText(R.string.main_previewNumber);

@@ -41,7 +41,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
     public Object getChild(int groupPosition, int childPosition) {
         return this.contactsList.get(groupPosition);
         /*switch (childPosition) {
-            case 0: return this.contactsList.get(groupPosition).photoSrc;
+            case 0: return this.contactsList.get(groupPosition).imageSrc;
             case 1: return this.contactsList.get(groupPosition).name;
             case 2: return this.contactsList.get(groupPosition).number;
             case 3: return this.contactsList.get(groupPosition).email;

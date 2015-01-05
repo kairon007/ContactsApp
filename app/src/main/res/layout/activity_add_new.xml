@@ -21,13 +21,20 @@
         <EditText android:id="@+id/addNew_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:capitalize="words"
-            android:hint="Name" />
+            android:inputType="textCapWords"
+            android:hint="@string/hint_name" />
 
         <EditText android:id="@+id/addNew_number"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Number" />
+            android:inputType="phone"
+            android:hint="@string/hint_number" />
+
+        <EditText android:id="@+id/addNew_email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textEmailAddress"
+            android:hint="@string/hint_email" />
 
     </LinearLayout>
 
