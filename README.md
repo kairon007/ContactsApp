@@ -3,20 +3,24 @@ ContactsApp
 
 Another experimental app for learning purposes
 
-**Work in progress**
+<h2>Work in progress</h2>
 
-Displays contact information in list form, including picture, name, phone number, and maybe more. User can create, edit, and delete contacts, as well as call and text numbers straight from the app. Contact information is saved on the device, so that the list of contacts is retained upon closing and reopening the app.
+<p>Displays contact information in list form, including picture, name, phone number, and maybe more. User can create, edit, and delete contacts, as well as call and text numbers straight from the app. Contact information is saved on the device, so that the list of contacts is retained upon closing and reopening the app.</p>
 
-**Implemented**
-Contact card can hold name, phone number & email address
-Displaying data with ExpandableListView
-Adding contacts
-Editing existing contacts
-Deleting contacts
-Saving contacts as persistent data with SharedPreferences
-Retaining activity states with savedInstanceState
+<h3>Implemented</h3>
+<ul>
+<li>Contact card can hold name, phone number & email address</li>
+<li>Displaying data with ExpandableListView</li>
+<li>Adding contacts</li>
+<li>Editing existing contacts</li>
+<li>Deleting contacts</li>
+<li>Saving contacts as persistent data with SharedPreferences</li>
+<li>Retaining activity states with savedInstanceStatev
+</ul>
 
-**Working on**
-Customizable contact card fields
-Working with bundles
-Contact photos
+<h3>Working on</h3>
+<ul>
+<li>Customizable contact card fields</li>
+<li>Working with bundles</li>
+<li>Contact photos</li>
+</ul>
