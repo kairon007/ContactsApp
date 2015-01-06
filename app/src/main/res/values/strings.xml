@@ -12,7 +12,7 @@
     <string name="button_call">Call</string>
     <string name="button_text">SMS</string>
 
-    <string name="title_activity_add_new">AddNewActivity</string>
+    <string name="title_activity_add_new">Add New Contact</string>
     <string name="menu_save">Save contact</string>
     <string name="hint_name">Name</string>
     <string name="hint_number">Phone number</string>
@@ -25,7 +25,7 @@
     <string name="pref_contactEmail">contactEmail</string>
     <string name="pref_contactImage">contactImage</string>
 
-    <string name="title_activity_edit">EditActivity</string>
+    <string name="title_activity_edit">Edit Contact</string>
     <string name="extra_listposition">com.jerryfeng.extraListPosition</string>
     <string name="extra_name">com.jerryfeng.extraName</string>
     <string name="extra_number">com.jerryfeng.extraNumber</string>

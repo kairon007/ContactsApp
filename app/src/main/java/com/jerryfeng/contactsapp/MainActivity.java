@@ -8,28 +8,34 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ExpandableListView;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 
-public class MainActivity extends ActionBarActivity implements View.OnClickListener, ExpandableListView.OnGroupExpandListener, ExpandableListView.OnGroupCollapseListener {
+public class MainActivity extends ActionBarActivity implements View.OnClickListener,
+        ExpandableListView.OnGroupExpandListener, ExpandableListView.OnGroupCollapseListener {
 
     //Widgets
 
     ExpandableListView contactsListView;
     ExpandableListAdapter contactsAdapter;
     ArrayList<Contact> contactsList;
+
+    //Saving list view states
     int prevSelectedGroup;
+    int listViewPosition;
+    int listViewOffset;
 
     //Saving activity states for change in screen config etc.
-    static final String STATE_PREVIEWNAME = "previewName";
+    static final String STATE_SELECTEDGROUP = "selectedgroup";
+    static final String STATE_LISTVIEWPOS = "listviewpos";
+    static final String STATE_LISTVIEWOFFSET = "listviewoffset";
 
     //Saving persistent data
     SharedPreferences sharedPref;
@@ -39,40 +45,63 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //Instantiating components
-
+        //Instantiating list view
         contactsListView = (ExpandableListView)findViewById(R.id.main_contactsList);
         contactsList = new ArrayList<Contact>();
         contactsListView.setOnGroupExpandListener(this);
         contactsListView.setOnGroupCollapseListener(this);
+
+        //Initialize view state variables (these are default values)
         prevSelectedGroup = -1;
+        listViewPosition = 0;
+        listViewOffset = 0;
 
-
+        //Called here for when app is first run (or after screen config change)
+        loadContactList();
     }
 
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
 
+        //Get position of top visible item
+        listViewPosition = contactsListView.getFirstVisiblePosition();
+        //Get scroll offset of top visible item
+        View childView = contactsListView.getChildAt(0);
+        if (childView != null) {
+            listViewOffset = childView.getTop();
+        }
+        //Save list view state
+        savedInstanceState.putInt(STATE_SELECTEDGROUP, prevSelectedGroup);
+        savedInstanceState.putInt(STATE_LISTVIEWPOS, listViewPosition);
+        savedInstanceState.putInt(STATE_LISTVIEWOFFSET, listViewOffset);
+        Log.d("saving instance", "pos " + listViewPosition + " offset " + listViewOffset);
     }
 
     @Override
     public void onRestoreInstanceState(Bundle savedInstanceState) {
-        //loadContactList();
+        super.onRestoreInstanceState(savedInstanceState);
+
+        //Recover list view state
+        prevSelectedGroup = savedInstanceState.getInt(STATE_SELECTEDGROUP);
+        listViewPosition = savedInstanceState.getInt(STATE_LISTVIEWPOS);
+        listViewOffset = savedInstanceState.getInt(STATE_LISTVIEWOFFSET);
+        recoverListState();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
 
+        //Called here for when leaving this activity to another activity
         saveContactList();
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
+    protected void onRestart() {
+        super.onRestart();
 
-        //Called both when app is started & returning from a child activity
-        //Call here or call separately in onCreate() and onRestart()?
+        //Called here for when returning to this activity from another activity
         loadContactList();
     }
 
@@ -136,6 +165,8 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                         public void onClick(DialogInterface dialog, int which) {
                             contactsList.remove(prevSelectedGroup);
                             saveContactList();
+                            updateListAdapter();
+                            recoverListState();
                         }
                     });
                     alertDelete.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -158,7 +189,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
     @Override
     public void onGroupExpand(int groupPosition) {
-        //Collapse all other groups except for currently selected one
+        //Collapse previously selected group
         if (groupPosition != prevSelectedGroup) {
             contactsListView.collapseGroup(prevSelectedGroup);
         }
@@ -167,10 +198,11 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
     @Override
     public void onGroupCollapse(int groupPosition) {
-        //Reset selected group
+        //Reset selected group back to default
         prevSelectedGroup = -1;
     }
 
+    /** Load contacts from SharedPreferences */
     private void loadContactList() {
         sharedPref = getSharedPreferences(getString(R.string.pref_contacts_key), Context.MODE_PRIVATE);
 
@@ -190,13 +222,12 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                 contactsList.set(i, contact);   //replace existing entry
             }
         }
-        //Update list adapter
-        contactsAdapter = new ExpandableListAdapter(this, contactsList);
-        contactsListView.setAdapter(contactsAdapter);
-        contactsAdapter.notifyDataSetChanged();
 
+        updateListAdapter();
+        recoverListState();
     }
 
+    /** Save contacts to SharedPreferences */
     private void saveContactList() {
         sharedPref = getSharedPreferences(getString(R.string.pref_contacts_key), Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
@@ -211,10 +242,20 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
             editor.putString(getString(R.string.pref_contactImage) + i, contactsList.get(i).imageSrc);
         }
         editor.commit();
-        //Update list adapter
+    }
+
+    /** Called when list view's size is changed */
+    private void updateListAdapter() {
         contactsAdapter = new ExpandableListAdapter(this, contactsList);
         contactsListView.setAdapter(contactsAdapter);
         contactsAdapter.notifyDataSetChanged();
     }
 
+    /** Re-expand any previously expanded groups, and recover previous scroll position */
+    private void recoverListState() {
+        if (prevSelectedGroup >= 0) {
+            contactsListView.expandGroup(prevSelectedGroup);
+        }
+        contactsListView.setSelectionFromTop(listViewPosition, listViewOffset);
+    }
 }
