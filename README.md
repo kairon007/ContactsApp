@@ -15,12 +15,12 @@ Another experimental app for learning purposes
 <li>Editing existing contacts</li>
 <li>Deleting contacts</li>
 <li>Saving contacts as persistent data with SharedPreferences</li>
-<li>Retaining activity states with savedInstanceStatev
+<li>Retaining activity states with savedInstanceState</li>
+<li>**Customizable contact card fields**</li>
 </ul>
 
 <h3>Working on</h3>
 <ul>
-<li>Customizable contact card fields</li>
 <li>Working with bundles</li>
 <li>Contact photos</li>
 </ul>
