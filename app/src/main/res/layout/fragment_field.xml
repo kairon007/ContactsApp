@@ -1,0 +1,31 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.jerryfeng.contactsapp.FieldFragment"
+    android:orientation="horizontal">
+
+    <EditText android:id="@+id/frag_fieldType"
+        android:layout_width="80sp"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="10dp"
+        android:layout_marginEnd="10dp" />
+
+    <EditText android:id="@+id/frag_fieldValue"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content" />
+
+    <TextView android:id="@+id/addNew_delete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginRight="10dp"
+        android:layout_marginEnd="10dp"
+        android:padding="5dp"
+        android:text="@string/buttonDeleteField"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        android:textColor="@color/text_colour" />
+
+</LinearLayout>

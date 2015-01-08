@@ -1,11 +1,20 @@
 package com.jerryfeng.contactsapp;
 
+import java.util.ArrayList;
+
 /**
  * Custom class
  */
 public class Contact {
-    String imageSrc;
+    //String imageSrc;
     String name;
-    String number;
-    String email;
+    ArrayList<Field> numbers;
+    ArrayList<Field> emails;
+    ArrayList<Field> misc;
+
+    public Contact() {  //Constructor
+        numbers = new ArrayList<Field>();
+        emails = new ArrayList<Field>();
+        misc = new ArrayList<Field>();
+    }
 }

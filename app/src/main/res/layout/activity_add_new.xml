@@ -1,41 +1,96 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.jerryfeng.contactsapp.AddNewActivity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal"
-    tools:context="com.jerryfeng.contactsapp.AddNewActivity">
+    android:fillViewport="true">
 
-    <ImageButton android:id="@+id/addNew_image"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="20dp"
-        android:src="@drawable/ic_launcher" />
+    <TableLayout android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TableRow>
+            <ImageButton android:id="@+id/addNew_image"
+                android:layout_margin="10dp"
+                android:src="@drawable/ic_launcher" />
 
-    <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:padding="10dp"
-        android:orientation="vertical">
+            <EditText android:id="@+id/addNew_fieldName"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_gravity="center"
+                android:layout_marginRight="20dp"
+                android:layout_marginEnd="20dp"
+                android:inputType="textCapWords"
+                android:hint="@string/hint_name"/>
+        </TableRow>
 
-        <EditText android:id="@+id/addNew_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textCapWords"
-            android:hint="@string/hint_name" />
+        <TableRow>
+            <RelativeLayout
+                android:gravity="center_horizontal"
+                android:layout_gravity="bottom"
+                android:paddingBottom="12dp">
+                <TextView android:id="@+id/addNew_addNumber"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    android:text="@string/buttonAddField"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/text_colour" />
+            </RelativeLayout>
 
-        <EditText android:id="@+id/addNew_number"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="phone"
-            android:hint="@string/hint_number" />
+            <LinearLayout android:id="@+id/addNew_numbersContainer"
+                android:orientation="vertical"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:padding="10dp">
+            </LinearLayout>
+        </TableRow>
 
-        <EditText android:id="@+id/addNew_email"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textEmailAddress"
-            android:hint="@string/hint_email" />
+        <TableRow>
+            <RelativeLayout
+                android:gravity="center_horizontal"
+                android:layout_gravity="bottom"
+                android:paddingBottom="12dp">
+                <TextView android:id="@+id/addNew_addEmail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    android:text="@string/buttonAddField"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/text_colour" />
+            </RelativeLayout>
 
-    </LinearLayout>
+            <LinearLayout android:id="@+id/addNew_emailsContainer"
+                android:orientation="vertical"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:padding="10dp">
+            </LinearLayout>
+        </TableRow>
 
-</LinearLayout>
+        <TableRow>
+            <RelativeLayout
+                android:gravity="center_horizontal"
+                android:layout_gravity="bottom"
+                android:paddingBottom="12dp">
+                <TextView android:id="@+id/addNew_addMisc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    android:text="@string/buttonAddField"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/text_colour" />
+            </RelativeLayout>
+
+            <LinearLayout android:id="@+id/addNew_miscContainer"
+                android:orientation="vertical"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:padding="10dp">
+            </LinearLayout>
+        </TableRow>
+    </TableLayout>
+</ScrollView>
+
+

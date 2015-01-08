@@ -45,13 +45,6 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter implements 
     @Override
     public Object getChild(int groupPosition, int childPosition) {
         return this.contactsList.get(groupPosition);
-        /*switch (childPosition) {
-            case 0: return this.contactsList.get(groupPosition).imageSrc;
-            case 1: return this.contactsList.get(groupPosition).name;
-            case 2: return this.contactsList.get(groupPosition).number;
-            case 3: return this.contactsList.get(groupPosition).email;
-            default: return null;
-        }*/
     }
 
     @Override
@@ -76,6 +69,8 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter implements 
             convertView = inflater.inflate(R.layout.list_group, null);
         }
 
+        if (this.contactsList.size() < 1)   return convertView;
+
         //Instantiate components
         TextView groupHeaderView = (TextView)convertView.findViewById(R.id.list_group_textview);
         groupHeaderView.setText(this.contactsList.get(groupPosition).name);
@@ -91,14 +86,9 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter implements 
         }
 
         //Instantiate components
-        TextView childNameView = (TextView)convertView.findViewById(R.id.list_item_name);
-        childNameView.setText(this.contactsList.get(groupPosition).name);
-
-        TextView childNumberView = (TextView)convertView.findViewById(R.id.list_item_number);
-        childNumberView.setText(this.contactsList.get(groupPosition).number);
-
-        TextView childEmailView = (TextView)convertView.findViewById(R.id.list_item_email);
-        childEmailView.setText(this.contactsList.get(groupPosition).email);
+        ArrayList<FieldFragment> listFieldNumber = new ArrayList<FieldFragment>();
+        ArrayList<FieldFragment> listFieldEmail = new ArrayList<FieldFragment>();
+        ArrayList<FieldFragment> listFieldMisc = new ArrayList<FieldFragment>();
 
         Button buttonCall = (Button)convertView.findViewById(R.id.list_buttonCall);
         buttonCall.setOnClickListener(this);
@@ -122,14 +112,14 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter implements 
         switch (v.getId()) {
             case R.id.list_buttonCall:
                 Intent intentCall = new Intent(Intent.ACTION_DIAL);
-                intentCall.setData(Uri.parse("tel:" + this.contactsList.get(selectedGroup).number));
+                intentCall.setData(Uri.parse("tel:" + this.contactsList.get(selectedGroup).numbers));
                 if (intentCall.resolveActivity(context.getPackageManager()) != null) {
                     context.startActivity(intentCall);
                 }
                 break;
             case R.id.list_buttonText:
                 Intent intentText = new Intent(Intent.ACTION_SENDTO);
-                intentText.setData(Uri.parse("smsto:" + this.contactsList.get(selectedGroup).number));
+                intentText.setData(Uri.parse("smsto:" + this.contactsList.get(selectedGroup).numbers));
                 if (intentText.resolveActivity(context.getPackageManager()) != null) {
                     context.startActivity(intentText);
                 }

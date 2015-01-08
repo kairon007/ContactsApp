@@ -4,7 +4,6 @@
     <string name="app_name">ContactsApp</string>
 
     <string name="title_activity_main">Contacts</string>
-
     <string name="menu_addNew">Add new contact</string>
     <string name="menu_edit">Edit contact</string>
     <string name="menu_delete">Delete contact</string>
@@ -12,18 +11,30 @@
     <string name="button_call">Call</string>
     <string name="button_text">SMS</string>
 
+    <string name="pref_types_key">pref_types</string>
+    <string name="pref_values_key">pref_values</string>
+    <string name="pref_listLength">contactCount</string>
+    <string name="pref_name">name</string>
+    <string name="pref_number">tel</string>
+    <string name="pref_email">email</string>
+    <string name="pref_misc">misc</string>
+    <string name="pref_numofnumbers">numOfNumbers</string>
+    <string name="pref_numofemails">numOfEmails</string>
+    <string name="pref_numofmisc">numOfMisc</string>
+
     <string name="title_activity_add_new">Add New Contact</string>
     <string name="menu_save">Save contact</string>
     <string name="hint_name">Name</string>
     <string name="hint_number">Phone number</string>
     <string name="hint_email">Email address</string>
+    <string name="hint_type">Type</string>
+    <string name="hint_misc">Add more fields</string>
+    <string name="buttonAddField">+</string>
+    <string name="buttonDeleteField">-</string>
 
-    <string name="pref_contacts_key">pref_contacts</string>
-    <string name="pref_contactCount">contactCount</string>
-    <string name="pref_contactName">contactName</string>
-    <string name="pref_contactNumber">contactNumber</string>
-    <string name="pref_contactEmail">contactEmail</string>
-    <string name="pref_contactImage">contactImage</string>
+    <string name="frag_tag_number">tagNumber</string>
+    <string name="frag_tag_email">tagEmail</string>
+    <string name="frag_tag_misc">tagMisc</string>
 
     <string name="title_activity_edit">Edit Contact</string>
     <string name="extra_listposition">com.jerryfeng.extraListPosition</string>

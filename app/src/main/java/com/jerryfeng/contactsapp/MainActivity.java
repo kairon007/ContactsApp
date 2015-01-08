@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,8 +12,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ExpandableListView;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -28,7 +25,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     ArrayList<Contact> contactsList;
 
     //Saving list view states
-    int prevSelectedGroup;
+    int selectedGroup;
     int listViewPosition;
     int listViewOffset;
 
@@ -38,7 +35,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     static final String STATE_LISTVIEWOFFSET = "listviewoffset";
 
     //Saving persistent data
-    SharedPreferences sharedPref;
+    SharedPreferences sharedPrefTypes, sharedPrefValues;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +49,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         contactsListView.setOnGroupCollapseListener(this);
 
         //Initialize view state variables (these are default values)
-        prevSelectedGroup = -1;
+        selectedGroup = -1;
         listViewPosition = 0;
         listViewOffset = 0;
 
@@ -72,7 +69,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
             listViewOffset = childView.getTop();
         }
         //Save list view state
-        savedInstanceState.putInt(STATE_SELECTEDGROUP, prevSelectedGroup);
+        savedInstanceState.putInt(STATE_SELECTEDGROUP, selectedGroup);
         savedInstanceState.putInt(STATE_LISTVIEWPOS, listViewPosition);
         savedInstanceState.putInt(STATE_LISTVIEWOFFSET, listViewOffset);
         Log.d("saving instance", "pos " + listViewPosition + " offset " + listViewOffset);
@@ -83,7 +80,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         super.onRestoreInstanceState(savedInstanceState);
 
         //Recover list view state
-        prevSelectedGroup = savedInstanceState.getInt(STATE_SELECTEDGROUP);
+        selectedGroup = savedInstanceState.getInt(STATE_SELECTEDGROUP);
         listViewPosition = savedInstanceState.getInt(STATE_LISTVIEWPOS);
         listViewOffset = savedInstanceState.getInt(STATE_LISTVIEWOFFSET);
         recoverListState();
@@ -123,7 +120,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                 return true;
 
             case R.id.menu_edit:
-                if (prevSelectedGroup < 0) {
+                if (selectedGroup < 0) {
                     AlertDialog.Builder alertEdit = new AlertDialog.Builder(this);
                     alertEdit.setTitle("Edit contact");
                     alertEdit.setMessage("Please select a contact to edit");
@@ -136,13 +133,13 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                 else {
                     Intent intentEdit = new Intent(this, EditActivity.class);
                     intentEdit.setAction(Intent.ACTION_VIEW);
-                    Contact contact = contactsList.get(prevSelectedGroup);
+                    Contact contact = contactsList.get(selectedGroup);
                     Bundle bundle = new Bundle();
-                    intentEdit.putExtra(getString(R.string.extra_listposition), prevSelectedGroup);
-                    intentEdit.putExtra(getString(R.string.extra_name), contact.name);
-                    intentEdit.putExtra(getString(R.string.extra_number), contact.number);
-                    intentEdit.putExtra(getString(R.string.extra_email), contact.email);
-                    intentEdit.putExtra(getString(R.string.extra_image), contact.imageSrc);
+                    intentEdit.putExtra(getString(R.string.extra_listposition), selectedGroup);
+                    //intentEdit.putExtra(getString(R.string.extra_name), contact.name);
+                    //intentEdit.putExtra(getString(R.string.extra_number), contact.number);
+                    //intentEdit.putExtra(getString(R.string.extra_email), contact.email);
+                    //intentEdit.putExtra(getString(R.string.extra_image), contact.imageSrc);
                     startActivity(intentEdit);
                 }
                 return true;
@@ -150,7 +147,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
             case R.id.menu_delete:
                 AlertDialog.Builder alertDelete = new AlertDialog.Builder(this);
                 alertDelete.setTitle("Delete contact");
-                if (prevSelectedGroup < 0) {
+                if (selectedGroup < 0) {
                     alertDelete.setMessage("Please select a contact to delete");
                     alertDelete.setNeutralButton("OK", new DialogInterface.OnClickListener() {
                         @Override
@@ -163,7 +160,8 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                     alertDelete.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            contactsList.remove(prevSelectedGroup);
+                            contactsList.remove(selectedGroup);
+                            selectedGroup = -1;
                             saveContactList();
                             updateListAdapter();
                             recoverListState();
@@ -190,36 +188,64 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     @Override
     public void onGroupExpand(int groupPosition) {
         //Collapse previously selected group
-        if (groupPosition != prevSelectedGroup) {
-            contactsListView.collapseGroup(prevSelectedGroup);
+        if (groupPosition != selectedGroup) {
+            contactsListView.collapseGroup(selectedGroup);
         }
-        prevSelectedGroup = groupPosition;
+        selectedGroup = groupPosition;
     }
 
     @Override
     public void onGroupCollapse(int groupPosition) {
         //Reset selected group back to default
-        prevSelectedGroup = -1;
+        selectedGroup = -1;
     }
 
     /** Load contacts from SharedPreferences */
     private void loadContactList() {
-        sharedPref = getSharedPreferences(getString(R.string.pref_contacts_key), Context.MODE_PRIVATE);
+        sharedPrefTypes = getSharedPreferences(getString(R.string.pref_types_key), Context.MODE_PRIVATE);
+        sharedPrefValues = getSharedPreferences(getString(R.string.pref_values_key), Context.MODE_PRIVATE);
 
         //get updated length of list
-        int listLength = sharedPref.getInt(getString(R.string.pref_contactCount), 0);
-        //get each contact from numbered pref keys
-        for (int i = 0; i < listLength; i++) {
-            Contact contact = new Contact();
-            contact.name = sharedPref.getString(getString(R.string.pref_contactName) + i, "");
-            contact.number = sharedPref.getString(getString(R.string.pref_contactNumber) + i, "");
-            contact.email = sharedPref.getString(getString(R.string.pref_contactEmail) + i, "");
-            contact.imageSrc = sharedPref.getString(getString(R.string.pref_contactImage) + i, "");
+        int listLength = sharedPrefTypes.getInt(getString(R.string.pref_listLength), 0);
 
-            if (i >= contactsList.size()) {     //if index is beyond current list length,
-                contactsList.add(contact);      //add as new entry
-            } else {                            //if index is within current list length,
-                contactsList.set(i, contact);   //replace existing entry
+        for (int iList = 0; iList < listLength; iList++) {
+            Contact contact = new Contact();
+            //get name field
+            contact.name = sharedPrefValues.getString(getString(R.string.pref_name) + "_" + iList, "");
+            //get number fields
+            int numOfNumbers = sharedPrefTypes.getInt(getString(R.string.pref_numofnumbers) + "_" + iList, 0);
+            for (int iNum = 0; iNum < numOfNumbers; iNum++) {
+                Field number = new Field();
+                number.type = sharedPrefTypes.getString(getString(R.string.pref_number)
+                        + "_" + iList + "_" + iNum, "");
+                number.value = sharedPrefValues.getString(getString(R.string.pref_number)
+                        + "_" + iList + "_" + iNum, "");
+                contact.numbers.add(number);
+            }
+            //get email fields
+            int numOfEmails = sharedPrefTypes.getInt(getString(R.string.pref_numofemails) + "_" + iList, 0);
+            for (int iEm = 0; iEm < numOfEmails; iEm++) {
+                Field email = new Field();
+                email.type = sharedPrefTypes.getString(getString(R.string.pref_email)
+                        + "_" + iList + "_" + iEm, "");
+                email.value = sharedPrefValues.getString(getString(R.string.pref_email)
+                        + "_" + iList + "_" + iEm, "");
+                contact.emails.add(email);
+            }
+            //get misc fields
+            int numOfMisc = sharedPrefTypes.getInt(getString(R.string.pref_numofmisc) + "_" + iList, 0);
+            for (int iMisc = 0; iMisc < numOfMisc; iMisc++) {
+                Field misc = new Field();
+                misc.type = sharedPrefTypes.getString(getString(R.string.pref_misc)
+                        + "_" + iList + "_" + iMisc, "");
+                misc.value = sharedPrefValues.getString(getString(R.string.pref_misc)
+                        + "_" + iList + "_" + iMisc, "");
+                contact.misc.add(misc);
+            }
+            if (iList >= contactsList.size()) {     //if index is beyond current list length,
+                contactsList.add(contact);          //add as new entry
+            } else {                                //if index is within current list length,
+                contactsList.set(iList, contact);   //replace existing entry
             }
         }
 
@@ -229,19 +255,46 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
     /** Save contacts to SharedPreferences */
     private void saveContactList() {
-        sharedPref = getSharedPreferences(getString(R.string.pref_contacts_key), Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPref.edit();
-
-        //save length of list
-        editor.putInt(getString(R.string.pref_contactCount), contactsList.size());
-        //save each contact with numbered pref keys
-        for (int i = 0; i < contactsList.size(); i++) {
-            editor.putString(getString(R.string.pref_contactName) + i, contactsList.get(i).name);
-            editor.putString(getString(R.string.pref_contactNumber) + i, contactsList.get(i).number);
-            editor.putString(getString(R.string.pref_contactEmail) + i, contactsList.get(i).email);
-            editor.putString(getString(R.string.pref_contactImage) + i, contactsList.get(i).imageSrc);
+        sharedPrefTypes = getSharedPreferences(getString(R.string.pref_types_key), Context.MODE_PRIVATE);
+        sharedPrefValues = getSharedPreferences(getString(R.string.pref_values_key), Context.MODE_PRIVATE);
+        SharedPreferences.Editor eTypes = sharedPrefTypes.edit();
+        SharedPreferences.Editor eValues = sharedPrefValues.edit();
+        //save contact list length
+        eTypes.putInt(getString(R.string.pref_listLength), contactsList.size());
+        for (int iList = 0; iList < contactsList.size(); iList++) {
+            //save name field
+            eValues.putString(getString(R.string.pref_name) + "_" + iList,
+                    contactsList.get(iList).name);
+            //save number fields
+            eTypes.putInt(getString(R.string.pref_numofnumbers) + "_" + iList,
+                    contactsList.get(iList).numbers.size());
+            for (int iNum = 0; iNum < contactsList.get(iList).numbers.size(); iNum++) {
+                eTypes.putString(getString(R.string.pref_number) + "_" + iList + "_" + iNum,
+                        contactsList.get(iList).numbers.get(iNum).type);
+                eValues.putString(getString(R.string.pref_number) + "_" + iList + "_" + iNum,
+                        contactsList.get(iList).numbers.get(iNum).value);
+            }
+            //save email fields
+            eTypes.putInt(getString(R.string.pref_numofemails) + "_" + iList,
+                    contactsList.get(iList).emails.size());
+            for (int iEm = 0; iEm < contactsList.get(iList).emails.size(); iEm++) {
+                eTypes.putString(getString(R.string.pref_email) + "_" + iList + "_" + iEm,
+                        contactsList.get(iList).emails.get(iEm).type);
+                eValues.putString(getString(R.string.pref_email) + "_" + iList + "_" + iEm,
+                        contactsList.get(iList).emails.get(iEm).value);
+            }
+            //save misc fields
+            eTypes.putInt(getString(R.string.pref_numofmisc) + "_" + iList,
+                    contactsList.get(iList).misc.size());
+            for (int iMisc = 0; iMisc < contactsList.get(iList).misc.size(); iMisc++) {
+                eTypes.putString(getString(R.string.pref_misc) + "_" + iList + "_" + iMisc,
+                        contactsList.get(iList).misc.get(iMisc).type);
+                eValues.putString(getString(R.string.pref_misc) + "_" + iList + "_" + iMisc,
+                        contactsList.get(iList).misc.get(iMisc).value);
+            }
         }
-        editor.commit();
+        eTypes.commit();
+        eValues.commit();
     }
 
     /** Called when list view's size is changed */
@@ -253,8 +306,8 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
     /** Re-expand any previously expanded groups, and recover previous scroll position */
     private void recoverListState() {
-        if (prevSelectedGroup >= 0) {
-            contactsListView.expandGroup(prevSelectedGroup);
+        if (selectedGroup >= 0) {
+            contactsListView.expandGroup(selectedGroup);
         }
         contactsListView.setSelectionFromTop(listViewPosition, listViewOffset);
     }

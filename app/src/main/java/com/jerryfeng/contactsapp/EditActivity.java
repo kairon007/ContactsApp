@@ -71,7 +71,7 @@ public class EditActivity extends ActionBarActivity {
                     alert.show();
                     return true;
                 }
-
+                /*
                 sharedPref = getSharedPreferences(getString(R.string.pref_contacts_key), Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPref.edit();
 
@@ -84,7 +84,7 @@ public class EditActivity extends ActionBarActivity {
                         fieldEmail.getText().toString());
                 editor.putString(getString(R.string.pref_contactImage) + listPosition,
                         "");
-                editor.commit();
+                editor.commit();*/
 
                 finish();
                 return true;
