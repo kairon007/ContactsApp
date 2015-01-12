@@ -1,5 +1,7 @@
 package com.jerryfeng.contactsapp;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 
 /**
@@ -16,5 +18,13 @@ public class Contact {
         numbers = new ArrayList<Field>();
         emails = new ArrayList<Field>();
         misc = new ArrayList<Field>();
+    }
+
+    public CharSequence[] getNumberValues() {
+        CharSequence[] numbers = new String[this.numbers.size()];
+        for (int i = 0; i < this.numbers.size(); i++) {
+            numbers[i] = this.numbers.get(i).value;
+        }
+        return numbers;
     }
 }

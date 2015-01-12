@@ -192,6 +192,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
             contactsListView.collapseGroup(selectedGroup);
         }
         selectedGroup = groupPosition;
+
     }
 
     @Override

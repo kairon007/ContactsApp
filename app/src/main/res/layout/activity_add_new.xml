@@ -9,8 +9,9 @@
         android:layout_height="wrap_content">
         <TableRow>
             <ImageButton android:id="@+id/addNew_image"
+                android:contentDescription="@string/avatar_description"
                 android:layout_margin="10dp"
-                android:src="@drawable/ic_launcher" />
+                android:src="@drawable/avatar" />
 
             <EditText android:id="@+id/addNew_fieldName"
                 android:layout_width="0dp"

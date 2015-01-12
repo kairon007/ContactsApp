@@ -1,6 +1,8 @@
 package com.jerryfeng.contactsapp;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.view.LayoutInflater;
@@ -8,7 +10,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -19,7 +24,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter implements 
 
     private ArrayList<Contact> contactsList;
     private Context context;
-    int selectedGroup;
+    private int selectedGroup;
 
     public ExpandableListAdapter(Context context, ArrayList<Contact> list) {
         this.context = context;
@@ -68,7 +73,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter implements 
             LayoutInflater inflater = (LayoutInflater)this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(R.layout.list_group, null);
         }
-
+        //Return empty view if contact list is empty
         if (this.contactsList.size() < 1)   return convertView;
 
         //Instantiate components
@@ -82,13 +87,62 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter implements 
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater)this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
             convertView = inflater.inflate(R.layout.list_item, null);
         }
 
-        //Instantiate components
-        ArrayList<FieldFragment> listFieldNumber = new ArrayList<FieldFragment>();
-        ArrayList<FieldFragment> listFieldEmail = new ArrayList<FieldFragment>();
-        ArrayList<FieldFragment> listFieldMisc = new ArrayList<FieldFragment>();
+        //Update currently selected group position
+        this.selectedGroup = groupPosition;
+
+        //Instantiate containers
+        LinearLayout numbersTypeContainer = (LinearLayout)convertView.findViewById(R.id.list_numbersTypeContainer);
+        LinearLayout numbersValContainer = (LinearLayout)convertView.findViewById(R.id.list_numbersValContainer);
+        LinearLayout emailsTypeContainer = (LinearLayout)convertView.findViewById(R.id.list_emailsTypeContainer);
+        LinearLayout emailsValContainer = (LinearLayout)convertView.findViewById(R.id.list_emailsValContainer);
+        LinearLayout miscTypeContainer = (LinearLayout)convertView.findViewById(R.id.list_miscTypeContainer);
+        LinearLayout miscValContainer = (LinearLayout)convertView.findViewById(R.id.list_miscValContainer);
+
+        //Reset containers
+        numbersTypeContainer.removeAllViews();
+        numbersValContainer.removeAllViews();
+        emailsTypeContainer.removeAllViews();
+        emailsValContainer.removeAllViews();
+        miscTypeContainer.removeAllViews();
+        miscValContainer.removeAllViews();
+
+        //Fill containers
+        for (int iNum = 0; iNum < contactsList.get(this.selectedGroup).numbers.size(); iNum++) {
+            TextView viewType = new TextView(this.context);
+            viewType.setTextSize(16);
+            TextView viewVal = new TextView(this.context);
+            viewVal.setTextSize(16);
+            viewType.setText(contactsList.get(this.selectedGroup).numbers.get(iNum).type);
+            numbersTypeContainer.addView(viewType);
+            viewVal.setText(contactsList.get(this.selectedGroup).numbers.get(iNum).value);
+            numbersValContainer.addView(viewVal);
+        }
+        for (int iEm = 0; iEm < contactsList.get(this.selectedGroup).emails.size(); iEm++) {
+            TextView viewType = new TextView(this.context);
+            viewType.setTextSize(16);
+            TextView viewVal = new TextView(this.context);
+            viewVal.setTextSize(16);
+            viewType.setText(contactsList.get(this.selectedGroup).emails.get(iEm).type);
+            emailsTypeContainer.addView(viewType);
+            viewVal.setText(contactsList.get(this.selectedGroup).emails.get(iEm).value);
+            emailsValContainer.addView(viewVal);
+        }
+        for (int iMisc = 0; iMisc < contactsList.get(this.selectedGroup).misc.size(); iMisc++) {
+            TextView viewType = new TextView(this.context);
+            viewType.setTextSize(16);
+            TextView viewVal = new TextView(this.context);
+            viewVal.setTextSize(16);
+            viewType.setText(contactsList.get(this.selectedGroup).misc.get(iMisc).type);
+            miscTypeContainer.addView(viewType);
+            viewVal.setText(contactsList.get(this.selectedGroup).misc.get(iMisc).value);
+            miscValContainer.addView(viewVal);
+        }
+
+
 
         Button buttonCall = (Button)convertView.findViewById(R.id.list_buttonCall);
         buttonCall.setOnClickListener(this);
@@ -96,8 +150,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter implements 
         Button buttonText = (Button)convertView.findViewById(R.id.list_buttonText);
         buttonText.setOnClickListener(this);
 
-        //Update currently selected group position
-        this.selectedGroup = groupPosition;
+
 
         return convertView;
     }
@@ -111,18 +164,48 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter implements 
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.list_buttonCall:
-                Intent intentCall = new Intent(Intent.ACTION_DIAL);
-                intentCall.setData(Uri.parse("tel:" + this.contactsList.get(selectedGroup).numbers));
-                if (intentCall.resolveActivity(context.getPackageManager()) != null) {
-                    context.startActivity(intentCall);
-                }
+                AlertDialog.Builder alertCall = new AlertDialog.Builder(this.context);
+                alertCall.setTitle("Please choose a number to call");
+                alertCall.setMultiChoiceItems(this.contactsList.get(selectedGroup).getNumberValues(), null,
+                        new DialogInterface.OnMultiChoiceClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+                                Intent intentCall = new Intent(Intent.ACTION_DIAL);
+                                intentCall.setData(Uri.parse("tel:" +
+                                        contactsList.get(selectedGroup).getNumberValues()[which]));
+                                if (intentCall.resolveActivity(context.getPackageManager()) != null) {
+                                    context.startActivity(intentCall);
+                                }
+                                dialog.dismiss();
+                            }
+                        });
+                alertCall.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {}
+                });
+                alertCall.show();
                 break;
             case R.id.list_buttonText:
-                Intent intentText = new Intent(Intent.ACTION_SENDTO);
-                intentText.setData(Uri.parse("smsto:" + this.contactsList.get(selectedGroup).numbers));
-                if (intentText.resolveActivity(context.getPackageManager()) != null) {
-                    context.startActivity(intentText);
-                }
+                AlertDialog.Builder alertText = new AlertDialog.Builder(this.context);
+                alertText.setTitle("Please choose a number to message");
+                alertText.setMultiChoiceItems(this.contactsList.get(selectedGroup).getNumberValues(), null,
+                        new DialogInterface.OnMultiChoiceClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+                                Intent intentText = new Intent(Intent.ACTION_SENDTO);
+                                intentText.setData(Uri.parse("smsto:" +
+                                        contactsList.get(selectedGroup).getNumberValues()[which]));
+                                if (intentText.resolveActivity(context.getPackageManager()) != null) {
+                                    context.startActivity(intentText);
+                                }
+                                dialog.dismiss();
+                            }
+                        });
+                alertText.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {}
+                });
+                alertText.show();
                 break;
         }
     }

@@ -5,20 +5,24 @@
     android:layout_height="match_parent"
     tools:context="com.jerryfeng.contactsapp.AddNewActivity">
 
-    <TableRow>
-        <LinearLayout
+    <TableRow android:padding="10dp">
+        <ImageView android:id="@+id/list_item_image"
+            android:contentDescription="@string/avatar_description"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:orientation="horizontal">
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginEnd="10dp"
+            android:src="@drawable/avatar" />
 
-            <ImageView android:id="@+id/list_item_image"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_margin="20dp"
-                android:src="@drawable/ic_launcher" />
-
+        <LinearLayout android:orientation="horizontal"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:paddingTop="10dp"
+            android:paddingRight="10dp"
+            android:paddingEnd="10dp"
+            android:gravity="end">
             <Button android:id="@+id/list_buttonCall"
                 android:layout_width="@dimen/abc_action_button_min_width_material"
                 android:layout_height="@dimen/abc_action_button_min_height_material"
@@ -36,44 +40,51 @@
                 android:textSize="14sp"
                 android:textAllCaps="false"
                 android:padding="0dp" />
-
         </LinearLayout>
-
     </TableRow>
 
-    <TableRow>
-        <LinearLayout android:id="@+id/addNew_numbersContainer"
+    <TableRow android:paddingLeft="20dp"
+        android:paddingStart="20dp">
+        <LinearLayout android:id="@+id/list_numbersTypeContainer"
+            android:orientation="vertical"
+            android:layout_width="100sp"
+            android:padding="10dp">
+        </LinearLayout>
+        <LinearLayout android:id="@+id/list_numbersValContainer"
             android:orientation="vertical"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:padding="10dp">
         </LinearLayout>
-
-        <LinearLayout android:orientation="vertical">
-        </LinearLayout>
     </TableRow>
 
-    <TableRow>
-        <LinearLayout android:id="@+id/addNew_emailsContainer"
+    <TableRow android:paddingLeft="20dp"
+        android:paddingStart="20dp">
+        <LinearLayout android:id="@+id/list_emailsTypeContainer"
+            android:orientation="vertical"
+            android:layout_width="100sp"
+            android:padding="10dp">
+        </LinearLayout>
+        <LinearLayout android:id="@+id/list_emailsValContainer"
             android:orientation="vertical"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:padding="10dp">
         </LinearLayout>
-
-        <LinearLayout android:orientation="vertical">
-        </LinearLayout>
     </TableRow>
 
-    <TableRow>
-        <LinearLayout android:id="@+id/addNew_miscContainer"
+    <TableRow android:paddingLeft="20dp"
+        android:paddingStart="20dp">
+        <LinearLayout android:id="@+id/list_miscTypeContainer"
+            android:orientation="vertical"
+            android:layout_width="100sp"
+            android:padding="10dp">
+        </LinearLayout>
+        <LinearLayout android:id="@+id/list_miscValContainer"
             android:orientation="vertical"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:padding="10dp">
-        </LinearLayout>
-
-        <LinearLayout android:orientation="vertical">
         </LinearLayout>
     </TableRow>
 </TableLayout>
