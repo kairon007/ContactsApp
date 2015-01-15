@@ -32,8 +32,8 @@ public class ContactsDataHandler extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + "(" + COL_ID + " INTEGER PRIMARY KEY,"
-                + COL_CONTAINER + " TEXT," + COL_TYPE + " TEXT" + COL_VALUE + " TEXT" + ")";
+        String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + " (" + COL_ID + " INTEGER,"
+                + COL_CONTAINER + " TEXT," + COL_TYPE + " TEXT," + COL_VALUE + " TEXT" + " )";
         db.execSQL(CREATE_TABLE);
     }
 
@@ -83,37 +83,44 @@ public class ContactsDataHandler extends SQLiteOpenHelper {
 
         //SQL: SELECT * FROM table WHERE id = id AND container = 'name'
         Cursor cName = db.rawQuery("SELECT * FROM " + TABLE_NAME + " WHERE " + COL_ID + "=" + id
-                + " AND " + COL_CONTAINER + "=" + Contact.NAME, null);
+                + " AND " + COL_CONTAINER + " = '" + Contact.NAME + "'", null);
         //SQL: SELECT * FROM table WHERE id = id AND container = 'number'
         Cursor cNumbers = db.rawQuery("SELECT * FROM " + TABLE_NAME + " WHERE " + COL_ID + "=" + id
-                + " AND " + COL_CONTAINER + "=" + Contact.NUMBER, null);
+                + " AND " + COL_CONTAINER + " = '" + Contact.NUMBER + "'", null);
         //SQL: SELECT * FROM table WHERE id = id AND container = 'email'
         Cursor cEmail = db.rawQuery("SELECT * FROM " + TABLE_NAME + " WHERE " + COL_ID + "=" + id
-                + " AND " + COL_CONTAINER + "=" + Contact.EMAIL, null);
+                + " AND " + COL_CONTAINER + " = '" + Contact.EMAIL + "'", null);
         //SQL: SELECT * FROM table WHERE id = id AND container = 'misc'
         Cursor cMisc = db.rawQuery("SELECT * FROM " + TABLE_NAME + " WHERE " + COL_ID + "=" + id
-                + " AND " + COL_CONTAINER + "=" + Contact.MISC, null);
-        if (cName == null || cNumbers == null || cEmail == null || cMisc == null) {
+                + " AND " + COL_CONTAINER + " = '" + Contact.MISC + "'", null);
+        if (cName.getCount() < 1) {
+            db.close();
             return null;
         }
         cName.moveToFirst();
-        cNumbers.moveToFirst();
-        cEmail.moveToFirst();
-        cMisc.moveToFirst();
-
         contact.setName(cName.getString(cName.getColumnIndex(COL_VALUE)));
-        do {
-            contact.addNumber(cNumbers.getString(cNumbers.getColumnIndex(COL_TYPE)),
-                    cNumbers.getString(cNumbers.getColumnIndex(COL_VALUE)));
-        } while (cNumbers.moveToNext());
-        do {
-            contact.addEmail(cEmail.getString(cEmail.getColumnIndex(COL_TYPE)),
-                    cEmail.getString(cEmail.getColumnIndex(COL_VALUE)));
-        } while(cEmail.moveToNext());
-        do {
-            contact.addMisc(cMisc.getString(cMisc.getColumnIndex(COL_TYPE)),
-                    cMisc.getString(cMisc.getColumnIndex(COL_VALUE)));
-        } while(cMisc.moveToNext());
+
+        if (cNumbers.getCount() > 0) {
+            cNumbers.moveToFirst();
+            do {
+                contact.addNumber(cNumbers.getString(cNumbers.getColumnIndex(COL_TYPE)),
+                        cNumbers.getString(cNumbers.getColumnIndex(COL_VALUE)));
+            } while (cNumbers.moveToNext());
+        }
+        if (cEmail.getCount() > 0) {
+            cEmail.moveToFirst();
+            do {
+                contact.addEmail(cEmail.getString(cEmail.getColumnIndex(COL_TYPE)),
+                        cEmail.getString(cEmail.getColumnIndex(COL_VALUE)));
+            } while(cEmail.moveToNext());
+        }
+        if (cMisc.getCount() > 0) {
+            cMisc.moveToFirst();
+            do {
+                contact.addMisc(cMisc.getString(cMisc.getColumnIndex(COL_TYPE)),
+                        cMisc.getString(cMisc.getColumnIndex(COL_VALUE)));
+            } while(cMisc.moveToNext());
+        }
         db.close();
         return contact;
     }
@@ -126,5 +133,12 @@ public class ContactsDataHandler extends SQLiteOpenHelper {
             id++;
         }
         return list;
+    }
+
+    public int getContactsCount() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery("SELECT * FROM " + TABLE_NAME + " WHERE " + COL_CONTAINER + " = '"
+                + Contact.NAME + "'", null);
+        return c.getCount();
     }
 }

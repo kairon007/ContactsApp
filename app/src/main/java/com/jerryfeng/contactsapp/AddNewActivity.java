@@ -26,12 +26,17 @@ public class AddNewActivity extends ActionBarActivity implements View.OnClickLis
     EditText fieldName;
     TextView buttonAddNumber, buttonAddEmail, buttonAddMisc;
 
-    //Fragments
-    ArrayList<FieldFragment> listFieldNumber, listFieldEmail, listFieldMisc;
-    int fragmentCount;
+    //Fragment components
+    private ArrayList<FieldFragment> listFieldNumbers, listFieldEmails, listFieldMisc;
+    private int fragmentSerial;
 
-    //Saving persistent data
-    SharedPreferences sharedPrefTypes, sharedPrefValues;
+    //Keys for savedInstanceState
+    private static final String SAVE_NUMBERS_TYPE = "save_numbers_type";
+    private static final String SAVE_NUMBERS_VALUE = "save_numbers_value";
+    private static final String SAVE_EMAILS_TYPE = "save_emails_type";
+    private static final String SAVE_EMAILS_VALUE = "save_emails_value";
+    private static final String SAVE_MISC_TYPE = "save_misc_type";
+    private static final String SAVE_MISC_VALUE = "save_misc_value";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,12 +56,12 @@ public class AddNewActivity extends ActionBarActivity implements View.OnClickLis
         buttonAddMisc.setOnClickListener(this);
 
         //Initialize fragment components
-        listFieldNumber = new ArrayList<FieldFragment>();
-        listFieldEmail = new ArrayList<FieldFragment>();
+        listFieldNumbers = new ArrayList<FieldFragment>();
+        listFieldEmails = new ArrayList<FieldFragment>();
         listFieldMisc = new ArrayList<FieldFragment>();
-        fragmentCount = 0;
+        fragmentSerial = 0;
 
-        //Initialize fields
+        //Provide initial fields
         if (findViewById(R.id.addNew_numbersContainer) != null
                 && findViewById(R.id.addNew_emailsContainer) != null
                 && findViewById(R.id.addNew_miscContainer) != null
@@ -66,6 +71,44 @@ public class AddNewActivity extends ActionBarActivity implements View.OnClickLis
             onClick(findViewById(R.id.addNew_addMisc));
         }
 
+    }
+
+    //Handling screen config changes
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+        //TODO-Implement saving instance state for AddNewActivity
+
+        ArrayList<String> saveNumberTypes = new ArrayList<String>();
+        ArrayList<String> saveNumberValues = new ArrayList<String>();
+        for (int i = 0; i < this.listFieldNumbers.size(); i++) {
+            saveNumberTypes.add(this.listFieldNumbers.get(i).getFieldType());
+            saveNumberValues.add(this.listFieldNumbers.get(i).getFieldValue());
+        }
+        savedInstanceState.putStringArrayList(SAVE_NUMBERS_TYPE, saveNumberTypes);
+        savedInstanceState.putStringArrayList(SAVE_NUMBERS_VALUE, saveNumberValues);
+
+        ArrayList<String> saveEmailTypes = new ArrayList<String>();
+        ArrayList<String> saveEmailValues = new ArrayList<String>();
+        for (int i = 0; i < this.listFieldEmails.size(); i++) {
+            saveEmailTypes.add(this.listFieldEmails.get(i).getFieldType());
+            saveEmailValues.add(this.listFieldEmails.get(i).getFieldValue());
+        }
+        savedInstanceState.putStringArrayList(SAVE_EMAILS_TYPE, saveEmailTypes);
+        savedInstanceState.putStringArrayList(SAVE_EMAILS_VALUE, saveEmailValues);
+
+        ArrayList<String> saveMiscTypes = new ArrayList<String>();
+        ArrayList<String> saveMiscValues = new ArrayList<String>();
+        for (int i = 0; i < this.listFieldMisc.size(); i++) {
+            saveMiscTypes.add(this.listFieldMisc.get(i).getFieldType());
+            saveMiscValues.add(this.listFieldMisc.get(i).getFieldValue());
+        }
+        savedInstanceState.putStringArrayList(SAVE_MISC_TYPE, saveMiscTypes);
+        savedInstanceState.putStringArrayList(SAVE_MISC_VALUE, saveMiscValues);
+    }
+
+    //Handling screen config changes
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
     }
 
     @Override
@@ -93,68 +136,38 @@ public class AddNewActivity extends ActionBarActivity implements View.OnClickLis
                     return true;
                 }
 
-                sharedPrefTypes = getSharedPreferences(getString(R.string.pref_types_key), Context.MODE_PRIVATE);
-                sharedPrefValues = getSharedPreferences(getString(R.string.pref_values_key), Context.MODE_PRIVATE);
-                SharedPreferences.Editor eTypes = sharedPrefTypes.edit();
-                SharedPreferences.Editor eValues = sharedPrefValues.edit();
-
-                //update length of list
-                int contactCount = sharedPrefTypes.getInt(getString(R.string.pref_listLength), 0) + 1;
-                eTypes.putInt(getString(R.string.pref_listLength), contactCount);
+                Contact newContact = new Contact();
+                ContactsDataHandler db = new ContactsDataHandler(this);
                 //save name field
-                eValues.putString(getString(R.string.pref_name) + "_" + (contactCount - 1),
-                        fieldName.getText().toString());
+                newContact.setName(fieldName.getText().toString());
+                //set unique ID for each new contact
+                newContact.setID(db.getContactsCount());
                 //save number fields
-                int nonEmptyFields = 0;
-                for (int iNum = 0; iNum < listFieldNumber.size(); iNum++) {
-                    String fieldType = listFieldNumber.get(iNum).getFieldType();
-                    String fieldValue = listFieldNumber.get(iNum).getFieldValue();
+                for (int iNum = 0; iNum < listFieldNumbers.size(); iNum++) {
+                    String fieldType = listFieldNumbers.get(iNum).getFieldType();
+                    String fieldValue = listFieldNumbers.get(iNum).getFieldValue();
                     if (fieldType.length() > 0 && fieldValue.length() > 0) {
-                        eTypes.putString(getString(R.string.pref_number) + "_" + (contactCount - 1)
-                                + "_" + nonEmptyFields, fieldType);
-                        eValues.putString(getString(R.string.pref_number) + "_" + (contactCount - 1)
-                                + "_" + nonEmptyFields, fieldValue);
-                        nonEmptyFields++;
+                        newContact.addNumber(fieldType, fieldValue);
                     }
                 }
-                eTypes.putInt(getString(R.string.pref_numofnumbers) + "_" + (contactCount - 1),
-                        nonEmptyFields);
-
                 //save email fields
-                nonEmptyFields = 0;
-
-                for (int iEm = 0; iEm < listFieldEmail.size(); iEm++) {
-                    String fieldType = listFieldEmail.get(iEm).getFieldType();
-                    String fieldValue = listFieldEmail.get(iEm).getFieldValue();
+                for (int iEm = 0; iEm < listFieldEmails.size(); iEm++) {
+                    String fieldType = listFieldEmails.get(iEm).getFieldType();
+                    String fieldValue = listFieldEmails.get(iEm).getFieldValue();
                     if (fieldType.length() > 0 && fieldValue.length() > 0) {
-                        eTypes.putString(getString(R.string.pref_email) + "_" + (contactCount - 1)
-                                + "_" + nonEmptyFields, fieldType);
-                        eValues.putString(getString(R.string.pref_email) + "_" + (contactCount - 1)
-                                + "_" + nonEmptyFields, fieldValue);
-                        nonEmptyFields++;
+                        newContact.addEmail(fieldType, fieldValue);
                     }
                 }
-                eTypes.putInt(getString(R.string.pref_numofemails) + "_" + (contactCount - 1),
-                        nonEmptyFields);
-
                 //save misc fields
-                nonEmptyFields = 0;
                 for (int iMisc = 0; iMisc < listFieldMisc.size(); iMisc++) {
                     String fieldType = listFieldMisc.get(iMisc).getFieldType();
                     String fieldValue = listFieldMisc.get(iMisc).getFieldValue();
                     if (fieldType.length() > 0 && fieldValue.length() > 0) {
-                        eTypes.putString(getString(R.string.pref_misc) + "_" + (contactCount - 1)
-                                + "_" + nonEmptyFields, fieldType);
-                        eValues.putString(getString(R.string.pref_misc) + "_" + (contactCount - 1)
-                                + "_" + nonEmptyFields, fieldValue);
-                        nonEmptyFields++;
+                        newContact.addMisc(fieldType, fieldValue);
                     }
                 }
-                eTypes.putInt(getString(R.string.pref_numofmisc) + "_" + (contactCount - 1),
-                        nonEmptyFields);
-
-                eTypes.commit();
-                eValues.commit();
+                db.addContact(newContact);
+                db.close();
 
                 finish();
                 return true;
@@ -164,42 +177,43 @@ public class AddNewActivity extends ActionBarActivity implements View.OnClickLis
 
     @Override
     public void onClick(View v) {
+        Bundle args = new Bundle();
         switch (v.getId()) {
             case R.id.addNew_addNumber:
                 FieldFragment fieldNumber = new FieldFragment();
-                listFieldNumber.add(fieldNumber);
-                //Should use argument bundle to pass info instead?
-                fieldNumber.setContainerType(FieldFragment.CONTAINER_NUMBER);
-                fieldNumber.setIndexInContainer(listFieldNumber.size() - 1);
-
+                listFieldNumbers.add(fieldNumber);
+                //Create and pass arguments bundle
+                args.putInt(FieldFragment.PARAM_CONTAINER, FieldFragment.CONTAINER_NUMBER);
+                args.putInt(FieldFragment.PARAM_INDEX, listFieldNumbers.size() - 1);
+                fieldNumber.setArguments(args);
                 //Add fragment with unique tag
                 getSupportFragmentManager().beginTransaction().add(R.id.addNew_numbersContainer,
-                        fieldNumber, getString(R.string.frag_tag_number) + fragmentCount).commit();
-                fragmentCount++;
+                        fieldNumber, getString(R.string.frag_tag_number) + fragmentSerial).commit();
+                fragmentSerial++;
                 break;
             case R.id.addNew_addEmail:
                 FieldFragment fieldEmail = new FieldFragment();
-                listFieldEmail.add(fieldEmail);
-                //Should use argument bundle to pass info instead?
-                fieldEmail.setContainerType(FieldFragment.CONTAINER_EMAIL);
-                fieldEmail.setIndexInContainer(listFieldEmail.size() - 1);
-
+                listFieldEmails.add(fieldEmail);
+                //Create and pass arguments bundle
+                args.putInt(FieldFragment.PARAM_CONTAINER, FieldFragment.CONTAINER_EMAIL);
+                args.putInt(FieldFragment.PARAM_INDEX, listFieldEmails.size() - 1);
+                fieldEmail.setArguments(args);
                 //Add fragment with unique tag
                 getSupportFragmentManager().beginTransaction().add(R.id.addNew_emailsContainer,
-                        fieldEmail, getString(R.string.frag_tag_email) + fragmentCount).commit();
-                fragmentCount++;
+                        fieldEmail, getString(R.string.frag_tag_email) + fragmentSerial).commit();
+                fragmentSerial++;
                 break;
             case R.id.addNew_addMisc:
                 FieldFragment fieldMisc = new FieldFragment();
                 listFieldMisc.add(fieldMisc);
-                //Should use argument bundle to pass info instead?
-                fieldMisc.setContainerType(FieldFragment.CONTAINER_MISC);
-                fieldMisc.setIndexInContainer(listFieldMisc.size() - 1);
-
+                //Create and pass arguments bundle
+                args.putInt(FieldFragment.PARAM_CONTAINER, FieldFragment.CONTAINER_MISC);
+                args.putInt(FieldFragment.PARAM_INDEX, listFieldMisc.size() - 1);
+                fieldMisc.setArguments(args);
                 //Add fragment with unique tag
                 getSupportFragmentManager().beginTransaction().add(R.id.addNew_miscContainer,
-                        fieldMisc, getString(R.string.frag_tag_misc) + fragmentCount).commit();
-                fragmentCount++;
+                        fieldMisc, getString(R.string.frag_tag_misc) + fragmentSerial).commit();
+                fragmentSerial++;
                 break;
         }
     }
@@ -207,26 +221,22 @@ public class AddNewActivity extends ActionBarActivity implements View.OnClickLis
     @Override
     public void onFragmentDelete(String tag) {
         //Remove fragment, called by fragment itself
-        FieldFragment fragField = (FieldFragment)getSupportFragmentManager().findFragmentByTag(tag);
-        switch (fragField.getContainerType()) {
+        FieldFragment field = (FieldFragment)getSupportFragmentManager().findFragmentByTag(tag);
+        switch (field.getContainerType()) {
+            //Do not remove the last field in container
             case FieldFragment.CONTAINER_NUMBER:
-                //Do not remove the last field in container
-                if (listFieldNumber.size() == 1)    return;
-                listFieldNumber.remove(fragField);
+                if (listFieldNumbers.size() == 1)    return;
+                listFieldNumbers.remove(field);
                 break;
             case FieldFragment.CONTAINER_EMAIL:
-                //Do not remove the last field in container
-                if (listFieldEmail.size() == 1)    return;
-                listFieldEmail.remove(fragField);
+                if (listFieldEmails.size() == 1)    return;
+                listFieldEmails.remove(field);
                 break;
             case FieldFragment.CONTAINER_MISC:
-                //Do not remove the last field in container
                 if (listFieldMisc.size() == 1)    return;
-                listFieldMisc.remove(fragField);
+                listFieldMisc.remove(field);
                 break;
         }
-        getSupportFragmentManager().beginTransaction().remove(fragField).commit();
-
-        Log.d("delete", "index: " + fragField.getIndexInContainer() +"count: " + fragmentCount);
+        getSupportFragmentManager().beginTransaction().remove(field).commit();
     }
 }

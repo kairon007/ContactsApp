@@ -15,11 +15,10 @@ import android.widget.ExpandableListView;
 
 import java.util.ArrayList;
 
-public class MainActivity extends ActionBarActivity implements View.OnClickListener,
-        ExpandableListView.OnGroupExpandListener, ExpandableListView.OnGroupCollapseListener {
+public class MainActivity extends ActionBarActivity implements ExpandableListView.OnGroupExpandListener,
+        ExpandableListView.OnGroupCollapseListener {
 
     //Widgets
-
     ExpandableListView contactsListView;
     ExpandableListAdapter contactsAdapter;
     ArrayList<Contact> contactsList;
@@ -133,13 +132,10 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                 else {
                     Intent intentEdit = new Intent(this, EditActivity.class);
                     intentEdit.setAction(Intent.ACTION_VIEW);
+                    //Send data as extras for selected contact
                     Contact contact = contactsList.get(selectedGroup);
-                    Bundle bundle = new Bundle();
                     intentEdit.putExtra(getString(R.string.extra_listposition), selectedGroup);
-                    //intentEdit.putExtra(getString(R.string.extra_name), contact.name);
-                    //intentEdit.putExtra(getString(R.string.extra_number), contact.number);
-                    //intentEdit.putExtra(getString(R.string.extra_email), contact.email);
-                    //intentEdit.putExtra(getString(R.string.extra_image), contact.imageSrc);
+                    intentEdit.putExtra(getString(R.string.extra_contactparcel), contact);
                     startActivity(intentEdit);
                 }
                 return true;
@@ -160,6 +156,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                     alertDelete.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
+                            //Delete selected contact, update list and adapter data
                             contactsList.remove(selectedGroup);
                             selectedGroup = -1;
                             saveContactList();
@@ -181,11 +178,6 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     }
 
     @Override
-    public void onClick(View v) {
-
-    }
-
-    @Override
     public void onGroupExpand(int groupPosition) {
         //Collapse previously selected group
         if (groupPosition != selectedGroup) {
@@ -201,101 +193,21 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         selectedGroup = -1;
     }
 
-    /** Load contacts from SharedPreferences */
     private void loadContactList() {
-        sharedPrefTypes = getSharedPreferences(getString(R.string.pref_types_key), Context.MODE_PRIVATE);
-        sharedPrefValues = getSharedPreferences(getString(R.string.pref_values_key), Context.MODE_PRIVATE);
+        ContactsDataHandler db = new ContactsDataHandler(this);
+        contactsList = (ArrayList<Contact>)db.getAllContacts().clone();
 
-        //get updated length of list
-        int listLength = sharedPrefTypes.getInt(getString(R.string.pref_listLength), 0);
-
-        for (int iList = 0; iList < listLength; iList++) {
-            Contact contact = new Contact();
-            //get name field
-            contact.name = sharedPrefValues.getString(getString(R.string.pref_name) + "_" + iList, "");
-            //get number fields
-            int numOfNumbers = sharedPrefTypes.getInt(getString(R.string.pref_numofnumbers) + "_" + iList, 0);
-            for (int iNum = 0; iNum < numOfNumbers; iNum++) {
-                Field number = new Field();
-                number.type = sharedPrefTypes.getString(getString(R.string.pref_number)
-                        + "_" + iList + "_" + iNum, "");
-                number.value = sharedPrefValues.getString(getString(R.string.pref_number)
-                        + "_" + iList + "_" + iNum, "");
-                contact.numbers.add(number);
-            }
-            //get email fields
-            int numOfEmails = sharedPrefTypes.getInt(getString(R.string.pref_numofemails) + "_" + iList, 0);
-            for (int iEm = 0; iEm < numOfEmails; iEm++) {
-                Field email = new Field();
-                email.type = sharedPrefTypes.getString(getString(R.string.pref_email)
-                        + "_" + iList + "_" + iEm, "");
-                email.value = sharedPrefValues.getString(getString(R.string.pref_email)
-                        + "_" + iList + "_" + iEm, "");
-                contact.emails.add(email);
-            }
-            //get misc fields
-            int numOfMisc = sharedPrefTypes.getInt(getString(R.string.pref_numofmisc) + "_" + iList, 0);
-            for (int iMisc = 0; iMisc < numOfMisc; iMisc++) {
-                Field misc = new Field();
-                misc.type = sharedPrefTypes.getString(getString(R.string.pref_misc)
-                        + "_" + iList + "_" + iMisc, "");
-                misc.value = sharedPrefValues.getString(getString(R.string.pref_misc)
-                        + "_" + iList + "_" + iMisc, "");
-                contact.misc.add(misc);
-            }
-            if (iList >= contactsList.size()) {     //if index is beyond current list length,
-                contactsList.add(contact);          //add as new entry
-            } else {                                //if index is within current list length,
-                contactsList.set(iList, contact);   //replace existing entry
-            }
-        }
+        db.close();
 
         updateListAdapter();
         recoverListState();
     }
 
-    /** Save contacts to SharedPreferences */
+    //TODO - Save contacts to database
     private void saveContactList() {
-        sharedPrefTypes = getSharedPreferences(getString(R.string.pref_types_key), Context.MODE_PRIVATE);
-        sharedPrefValues = getSharedPreferences(getString(R.string.pref_values_key), Context.MODE_PRIVATE);
-        SharedPreferences.Editor eTypes = sharedPrefTypes.edit();
-        SharedPreferences.Editor eValues = sharedPrefValues.edit();
-        //save contact list length
-        eTypes.putInt(getString(R.string.pref_listLength), contactsList.size());
-        for (int iList = 0; iList < contactsList.size(); iList++) {
-            //save name field
-            eValues.putString(getString(R.string.pref_name) + "_" + iList,
-                    contactsList.get(iList).name);
-            //save number fields
-            eTypes.putInt(getString(R.string.pref_numofnumbers) + "_" + iList,
-                    contactsList.get(iList).numbers.size());
-            for (int iNum = 0; iNum < contactsList.get(iList).numbers.size(); iNum++) {
-                eTypes.putString(getString(R.string.pref_number) + "_" + iList + "_" + iNum,
-                        contactsList.get(iList).numbers.get(iNum).type);
-                eValues.putString(getString(R.string.pref_number) + "_" + iList + "_" + iNum,
-                        contactsList.get(iList).numbers.get(iNum).value);
-            }
-            //save email fields
-            eTypes.putInt(getString(R.string.pref_numofemails) + "_" + iList,
-                    contactsList.get(iList).emails.size());
-            for (int iEm = 0; iEm < contactsList.get(iList).emails.size(); iEm++) {
-                eTypes.putString(getString(R.string.pref_email) + "_" + iList + "_" + iEm,
-                        contactsList.get(iList).emails.get(iEm).type);
-                eValues.putString(getString(R.string.pref_email) + "_" + iList + "_" + iEm,
-                        contactsList.get(iList).emails.get(iEm).value);
-            }
-            //save misc fields
-            eTypes.putInt(getString(R.string.pref_numofmisc) + "_" + iList,
-                    contactsList.get(iList).misc.size());
-            for (int iMisc = 0; iMisc < contactsList.get(iList).misc.size(); iMisc++) {
-                eTypes.putString(getString(R.string.pref_misc) + "_" + iList + "_" + iMisc,
-                        contactsList.get(iList).misc.get(iMisc).type);
-                eValues.putString(getString(R.string.pref_misc) + "_" + iList + "_" + iMisc,
-                        contactsList.get(iList).misc.get(iMisc).value);
-            }
-        }
-        eTypes.commit();
-        eValues.commit();
+        ContactsDataHandler db = new ContactsDataHandler(this);
+
+        db.close();
     }
 
     /** Called when list view's size is changed */
