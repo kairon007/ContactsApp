@@ -14,13 +14,13 @@ Another experimental app for learning purposes
 <li>Adding contacts</li>
 <li>Editing existing contacts</li>
 <li>Deleting contacts</li>
-<li>Saving contacts as persistent data with SharedPreferences</li>
+<li>Saving contacts as persistent data with <strong>SQLite databases</strong></li>
 <li>Retaining activity states with savedInstanceState</li>
-<li>**Customizable contact card fields**</li>
+<li><strong>Customizable contact card fields</strong></li>
 </ul>
 
 <h3>Working on</h3>
 <ul>
-<li>Working with bundles</li>
+<li>Integrating databases</li>
 <li>Contact photos</li>
 </ul>
