@@ -78,7 +78,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter implements 
 
         //Instantiate components
         TextView groupHeaderView = (TextView)convertView.findViewById(R.id.list_group_textview);
-        groupHeaderView.setText(this.contactsList.get(groupPosition).name);
+        groupHeaderView.setText(this.contactsList.get(groupPosition).getName());
 
         return convertView;
     }
@@ -111,46 +111,41 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter implements 
         miscValContainer.removeAllViews();
 
         //Fill containers
-        for (int iNum = 0; iNum < contactsList.get(this.selectedGroup).numbers.size(); iNum++) {
+        for (int iNum = 0; iNum < contactsList.get(this.selectedGroup).getNumbersCount(); iNum++) {
             TextView viewType = new TextView(this.context);
             viewType.setTextSize(16);
             TextView viewVal = new TextView(this.context);
             viewVal.setTextSize(16);
-            viewType.setText(contactsList.get(this.selectedGroup).numbers.get(iNum).type);
+            viewType.setText(contactsList.get(this.selectedGroup).getNumberType(iNum));
             numbersTypeContainer.addView(viewType);
-            viewVal.setText(contactsList.get(this.selectedGroup).numbers.get(iNum).value);
+            viewVal.setText(contactsList.get(this.selectedGroup).getNumberValue(iNum));
             numbersValContainer.addView(viewVal);
         }
-        for (int iEm = 0; iEm < contactsList.get(this.selectedGroup).emails.size(); iEm++) {
+        for (int iEm = 0; iEm < contactsList.get(this.selectedGroup).getEmailsCount(); iEm++) {
             TextView viewType = new TextView(this.context);
             viewType.setTextSize(16);
             TextView viewVal = new TextView(this.context);
             viewVal.setTextSize(16);
-            viewType.setText(contactsList.get(this.selectedGroup).emails.get(iEm).type);
+            viewType.setText(contactsList.get(this.selectedGroup).getEmailType(iEm));
             emailsTypeContainer.addView(viewType);
-            viewVal.setText(contactsList.get(this.selectedGroup).emails.get(iEm).value);
+            viewVal.setText(contactsList.get(this.selectedGroup).getEmailValue(iEm));
             emailsValContainer.addView(viewVal);
         }
-        for (int iMisc = 0; iMisc < contactsList.get(this.selectedGroup).misc.size(); iMisc++) {
+        for (int iMisc = 0; iMisc < contactsList.get(this.selectedGroup).getMiscCount(); iMisc++) {
             TextView viewType = new TextView(this.context);
             viewType.setTextSize(16);
             TextView viewVal = new TextView(this.context);
             viewVal.setTextSize(16);
-            viewType.setText(contactsList.get(this.selectedGroup).misc.get(iMisc).type);
+            viewType.setText(contactsList.get(this.selectedGroup).getMiscType(iMisc));
             miscTypeContainer.addView(viewType);
-            viewVal.setText(contactsList.get(this.selectedGroup).misc.get(iMisc).value);
+            viewVal.setText(contactsList.get(this.selectedGroup).getMiscValue(iMisc));
             miscValContainer.addView(viewVal);
         }
 
-
-
         Button buttonCall = (Button)convertView.findViewById(R.id.list_buttonCall);
         buttonCall.setOnClickListener(this);
-
         Button buttonText = (Button)convertView.findViewById(R.id.list_buttonText);
         buttonText.setOnClickListener(this);
-
-
 
         return convertView;
     }
@@ -166,6 +161,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter implements 
             case R.id.list_buttonCall:
                 AlertDialog.Builder alertCall = new AlertDialog.Builder(this.context);
                 alertCall.setTitle("Please choose a number to call");
+                //Create list for user to choose a number
                 alertCall.setMultiChoiceItems(this.contactsList.get(selectedGroup).getNumberValues(), null,
                         new DialogInterface.OnMultiChoiceClickListener() {
                             @Override
@@ -188,6 +184,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter implements 
             case R.id.list_buttonText:
                 AlertDialog.Builder alertText = new AlertDialog.Builder(this.context);
                 alertText.setTitle("Please choose a number to message");
+                //Create list for user to choose a number
                 alertText.setMultiChoiceItems(this.contactsList.get(selectedGroup).getNumberValues(), null,
                         new DialogInterface.OnMultiChoiceClickListener() {
                             @Override

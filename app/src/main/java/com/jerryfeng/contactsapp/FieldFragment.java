@@ -19,9 +19,18 @@ public class FieldFragment extends Fragment implements View.OnClickListener {
     private int containerType;
     private int indexInContainer;
 
+    //Constants to assign input types to container types
     public static final int CONTAINER_NUMBER = InputType.TYPE_CLASS_PHONE;
     public static final int CONTAINER_EMAIL = InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS;
     public static final int CONTAINER_MISC = InputType.TYPE_CLASS_TEXT;
+
+    //Takes in parameters for the type of parent container it is in, its position index
+    //in that parent container, value of the type field (if it exists), and value of the
+    //value field (if it exists)
+    public static final String PARAM_CONTAINER = "param_container";
+    public static final String PARAM_INDEX = "param_index";
+    public static final String PARAM_TYPE = "param_type";
+    public static final String PARAM_VALUE = "param_value";
 
     public FieldFragment() {
         // Required empty public constructor
@@ -37,16 +46,28 @@ public class FieldFragment extends Fragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_field, container, false);
 
-        //read input type from arguments, instantiate components
+        //Read arguments & instantiate components
+        Bundle args = getArguments();
+        this.containerType = args.getInt(PARAM_CONTAINER);
+        this.indexInContainer = args.getInt(PARAM_INDEX);
 
         fieldType = (EditText)v.findViewById((R.id.frag_fieldType));
         fieldType.setInputType(InputType.TYPE_TEXT_FLAG_CAP_WORDS);
+        if (args.getString(PARAM_TYPE) != null) {
+            fieldType.setText(args.getString(PARAM_TYPE));
+        }
+        fieldType.setHint(getString(R.string.hint_type));
+
         fieldValue = (EditText)v.findViewById(R.id.frag_fieldValue);
         fieldValue.setInputType(this.containerType);
+        if (args.getString(PARAM_VALUE) != null) {
+            fieldValue.setText(args.getString(PARAM_VALUE));
+        }
+
         deleteField = (TextView)v.findViewById(R.id.addNew_delete);
         deleteField.setOnClickListener(this);
 
-        fieldType.setHint(getString(R.string.hint_type));
+        //Provide suggestions for type fields, depending on the field's position in its container
         switch(this.containerType) {
             case CONTAINER_NUMBER:
                 switch (this.indexInContainer) {
@@ -105,16 +126,8 @@ public class FieldFragment extends Fragment implements View.OnClickListener {
         public void onFragmentDelete(String tag);
     }
 
-    protected void setContainerType(int inputType) {
-        this.containerType = inputType;
-    }
-
     protected int getContainerType() {
         return this.containerType;
-    }
-
-    protected void setIndexInContainer(int index) {
-        this.indexInContainer = index;
     }
 
     protected int getIndexInContainer() {

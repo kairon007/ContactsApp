@@ -11,16 +11,31 @@ import java.util.ArrayList;
  */
 public class Contact implements Parcelable {
     //String imageSrc;
+    private int id;
     private String name;
     private ArrayList<Field> numbers;
     private ArrayList<Field> emails;
     private ArrayList<Field> misc;
 
+    public static final String NAME = "Name";
+    public static final String NUMBER = "Phone number";
+    public static final String EMAIL = "Email address";
+    public static final String MISC = "Misc field";
+
     public Contact() {  //Constructor
+        this.id = -1;
         this.name = "";
         this.numbers = new ArrayList<Field>();
         this.emails = new ArrayList<Field>();
         this.misc = new ArrayList<Field>();
+    }
+
+    public void setID (int id) {
+        this.id = id;
+    }
+
+    public int getID() {
+        return this.id;
     }
 
     public void setName (String name) {
@@ -75,9 +90,42 @@ public class Contact implements Parcelable {
         return this.emails.get(indexInEmails).getValue();
     }
 
+    public int getNumbersCount() {
+        return this.numbers.size();
+    }
+
+    public int getEmailsCount() {
+        return this.emails.size();
+    }
+
+    public int getMiscCount() {
+        return this.misc.size();
+    }
+
     public String getMiscValue(int indexInMisc) {
         return this.misc.get(indexInMisc).getValue();
     }
+
+    public void addNumber(String type, String value) {
+        Field newField = new Field();
+        newField.setType(type);
+        newField.setValue(value);
+        this.numbers.add(newField);
+    }
+
+    public void addEmail(String type, String value) {
+        Field newField = new Field();
+        newField.setType(type);
+        newField.setValue(value);
+        this.emails.add(newField);
+    }
+    public void addMisc(String type, String value) {
+        Field newField = new Field();
+        newField.setType(type);
+        newField.setValue(value);
+        this.misc.add(newField);
+    }
+
 
     public CharSequence[] getNumberValues() {
         CharSequence[] numbers = new String[this.numbers.size()];
