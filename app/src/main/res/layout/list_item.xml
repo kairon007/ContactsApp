@@ -11,7 +11,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="10dp"
             android:layout_marginRight="10dp"
             android:layout_marginEnd="10dp"
             android:src="@drawable/avatar" />
@@ -23,24 +22,44 @@
             android:paddingRight="10dp"
             android:paddingEnd="10dp"
             android:gravity="end">
-            <Button android:id="@+id/list_buttonCall"
+            <ImageButton android:id="@+id/list_buttonCall"
+                android:src="@android:drawable/sym_action_call"
+                android:contentDescription="@string/button_call"
+                android:background="@android:drawable/btn_default_small"
                 android:layout_width="@dimen/abc_action_button_min_width_material"
                 android:layout_height="@dimen/abc_action_button_min_height_material"
                 android:layout_marginEnd="10dp"
                 android:layout_marginRight="10dp"
-                android:text="@string/button_call"
-                android:textSize="14sp"
-                android:textAllCaps="false"
                 android:padding="0dp" />
 
-            <Button android:id="@+id/list_buttonText"
+            <ImageButton android:id="@+id/list_buttonText"
+                android:src="@android:drawable/sym_action_chat"
+                android:background="@android:drawable/btn_default_small"
+                android:contentDescription="@string/button_text"
                 android:layout_width="@dimen/abc_action_button_min_width_material"
                 android:layout_height="@dimen/abc_action_button_min_height_material"
-                android:text="@string/button_text"
-                android:textSize="14sp"
-                android:textAllCaps="false"
                 android:padding="0dp" />
         </LinearLayout>
+    </TableRow>
+
+    <TableRow android:paddingLeft="20dp"
+        android:paddingStart="20dp">
+        <TextView
+            android:text="@string/label_numbers"
+            android:textSize="16sp"
+            android:paddingTop="5dp"
+            android:paddingBottom="2dp"/>
+    </TableRow>
+
+    <TableRow android:paddingLeft="20dp"
+        android:paddingStart="20dp">
+        <View
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="1dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginEnd="20dp"
+            android:background="@color/secondary_text_default_material_light"/>
     </TableRow>
 
     <TableRow android:paddingLeft="20dp"
@@ -60,6 +79,26 @@
 
     <TableRow android:paddingLeft="20dp"
         android:paddingStart="20dp">
+        <TextView
+            android:text="@string/label_emails"
+            android:textSize="16sp"
+            android:paddingTop="5dp"
+            android:paddingBottom="2dp"/>
+    </TableRow>
+
+    <TableRow android:paddingLeft="20dp"
+        android:paddingStart="20dp">
+        <View
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="1dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginEnd="20dp"
+            android:background="@color/secondary_text_default_material_light"/>
+    </TableRow>
+
+    <TableRow android:paddingLeft="20dp"
+        android:paddingStart="20dp">
         <LinearLayout android:id="@+id/list_emailsTypeContainer"
             android:orientation="vertical"
             android:layout_width="100sp"
@@ -71,6 +110,26 @@
             android:layout_weight="1"
             android:padding="10dp">
         </LinearLayout>
+    </TableRow>
+
+    <TableRow android:paddingLeft="20dp"
+        android:paddingStart="20dp">
+        <TextView
+            android:text="@string/label_misc"
+            android:textSize="16sp"
+            android:paddingTop="5dp"
+            android:paddingBottom="2dp"/>
+    </TableRow>
+
+    <TableRow android:paddingLeft="20dp"
+    android:paddingStart="20dp">
+        <View
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="1dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginEnd="20dp"
+            android:background="@color/secondary_text_default_material_light"/>
     </TableRow>
 
     <TableRow android:paddingLeft="20dp"

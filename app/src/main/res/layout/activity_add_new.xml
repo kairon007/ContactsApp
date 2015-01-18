@@ -11,7 +11,8 @@
             <ImageButton android:id="@+id/addNew_image"
                 android:contentDescription="@string/avatar_description"
                 android:layout_margin="10dp"
-                android:src="@drawable/avatar" />
+                android:src="@drawable/avatar"
+                android:background="@android:drawable/btn_default"/>
 
             <EditText android:id="@+id/addNew_fieldName"
                 android:layout_width="0dp"
@@ -20,7 +21,28 @@
                 android:layout_marginRight="20dp"
                 android:layout_marginEnd="20dp"
                 android:inputType="textCapWords"
+                android:background="@android:drawable/edit_text"
                 android:hint="@string/hint_name"/>
+        </TableRow>
+
+        <TableRow>
+            <LinearLayout />
+            <TextView
+                android:text="@string/label_numbers"
+                android:textSize="16sp"
+                android:paddingTop="5dp"
+                android:paddingBottom="2dp"/>
+        </TableRow>
+
+        <TableRow>
+            <LinearLayout />
+            <View
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="1dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginEnd="20dp"
+                android:background="@color/secondary_text_default_material_light"/>
         </TableRow>
 
         <TableRow>
@@ -42,8 +64,31 @@
                 android:orientation="vertical"
                 android:layout_width="0dp"
                 android:layout_weight="1"
-                android:padding="10dp">
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:paddingRight="10dp"
+                android:paddingEnd="10dp">
             </LinearLayout>
+        </TableRow>
+
+        <TableRow>
+            <LinearLayout />
+            <TextView
+                android:text="@string/label_emails"
+                android:textSize="16sp"
+                android:paddingTop="5dp"
+                android:paddingBottom="2dp"/>
+        </TableRow>
+
+        <TableRow>
+            <LinearLayout />
+            <View
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="1dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginEnd="20dp"
+                android:background="@color/secondary_text_default_material_light"/>
         </TableRow>
 
         <TableRow>
@@ -65,8 +110,31 @@
                 android:orientation="vertical"
                 android:layout_width="0dp"
                 android:layout_weight="1"
-                android:padding="10dp">
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:paddingRight="10dp"
+                android:paddingEnd="10dp">
             </LinearLayout>
+        </TableRow>
+
+        <TableRow>
+            <LinearLayout />
+            <TextView
+                android:text="@string/label_misc"
+                android:textSize="16sp"
+                android:paddingTop="5dp"
+                android:paddingBottom="2dp"/>
+        </TableRow>
+
+        <TableRow>
+            <LinearLayout />
+            <View
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="1dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginEnd="20dp"
+                android:background="@color/secondary_text_default_material_light"/>
         </TableRow>
 
         <TableRow>
@@ -88,7 +156,10 @@
                 android:orientation="vertical"
                 android:layout_width="0dp"
                 android:layout_weight="1"
-                android:padding="10dp">
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:paddingRight="10dp"
+                android:paddingEnd="10dp">
             </LinearLayout>
         </TableRow>
     </TableLayout>
