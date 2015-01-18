@@ -1,5 +1,6 @@
 package com.jerryfeng.contactsapp;
 
+import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -8,8 +9,10 @@ import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ActionMenuView;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -111,11 +114,17 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter implements 
         miscValContainer.removeAllViews();
 
         //Fill containers
+        float dpScale = this.context.getResources().getDisplayMetrics().density;
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT);
+        lp.setMargins(0, (int)(3 * dpScale + 0.5f), 0, (int)(3 * dpScale + 0.5f));
         for (int iNum = 0; iNum < contactsList.get(this.selectedGroup).getNumbersCount(); iNum++) {
             TextView viewType = new TextView(this.context);
             viewType.setTextSize(16);
+            viewType.setLayoutParams(lp);
             TextView viewVal = new TextView(this.context);
             viewVal.setTextSize(16);
+            viewVal.setLayoutParams(lp);
             viewType.setText(contactsList.get(this.selectedGroup).getNumberType(iNum));
             numbersTypeContainer.addView(viewType);
             viewVal.setText(contactsList.get(this.selectedGroup).getNumberValue(iNum));
@@ -124,8 +133,10 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter implements 
         for (int iEm = 0; iEm < contactsList.get(this.selectedGroup).getEmailsCount(); iEm++) {
             TextView viewType = new TextView(this.context);
             viewType.setTextSize(16);
+            viewType.setLayoutParams(lp);
             TextView viewVal = new TextView(this.context);
             viewVal.setTextSize(16);
+            viewVal.setLayoutParams(lp);
             viewType.setText(contactsList.get(this.selectedGroup).getEmailType(iEm));
             emailsTypeContainer.addView(viewType);
             viewVal.setText(contactsList.get(this.selectedGroup).getEmailValue(iEm));
@@ -134,17 +145,19 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter implements 
         for (int iMisc = 0; iMisc < contactsList.get(this.selectedGroup).getMiscCount(); iMisc++) {
             TextView viewType = new TextView(this.context);
             viewType.setTextSize(16);
+            viewType.setLayoutParams(lp);
             TextView viewVal = new TextView(this.context);
             viewVal.setTextSize(16);
+            viewVal.setLayoutParams(lp);
             viewType.setText(contactsList.get(this.selectedGroup).getMiscType(iMisc));
             miscTypeContainer.addView(viewType);
             viewVal.setText(contactsList.get(this.selectedGroup).getMiscValue(iMisc));
             miscValContainer.addView(viewVal);
         }
 
-        Button buttonCall = (Button)convertView.findViewById(R.id.list_buttonCall);
+        ImageButton buttonCall = (ImageButton)convertView.findViewById(R.id.list_buttonCall);
         buttonCall.setOnClickListener(this);
-        Button buttonText = (Button)convertView.findViewById(R.id.list_buttonText);
+        ImageButton buttonText = (ImageButton)convertView.findViewById(R.id.list_buttonText);
         buttonText.setOnClickListener(this);
 
         return convertView;

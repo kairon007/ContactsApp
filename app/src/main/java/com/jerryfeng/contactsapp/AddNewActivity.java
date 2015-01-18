@@ -1,13 +1,10 @@
 package com.jerryfeng.contactsapp;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -31,6 +28,8 @@ public class AddNewActivity extends ActionBarActivity implements View.OnClickLis
     private int fragmentSerial;
 
     //Keys for savedInstanceState
+    private static final String SAVE_FRAGMENT_SERIAL = "save_fragment_serial";
+
     private static final String SAVE_NUMBERS_TYPE = "save_numbers_type";
     private static final String SAVE_NUMBERS_VALUE = "save_numbers_value";
     private static final String SAVE_EMAILS_TYPE = "save_emails_type";
@@ -62,14 +61,9 @@ public class AddNewActivity extends ActionBarActivity implements View.OnClickLis
         fragmentSerial = 0;
 
         //Provide initial fields
-        if (findViewById(R.id.addNew_numbersContainer) != null
-                && findViewById(R.id.addNew_emailsContainer) != null
-                && findViewById(R.id.addNew_miscContainer) != null
-                && savedInstanceState == null) {
-            onClick(findViewById(R.id.addNew_addNumber));
-            onClick(findViewById(R.id.addNew_addEmail));
-            onClick(findViewById(R.id.addNew_addMisc));
-        }
+        onClick(findViewById(R.id.addNew_addNumber));
+        onClick(findViewById(R.id.addNew_addEmail));
+        onClick(findViewById(R.id.addNew_addMisc));
 
     }
 
@@ -77,7 +71,8 @@ public class AddNewActivity extends ActionBarActivity implements View.OnClickLis
     public void onSaveInstanceState(Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
         //TODO-Implement saving instance state for AddNewActivity
-
+        /*
+        savedInstanceState.putInt(SAVE_FRAGMENT_SERIAL, fragmentSerial);
         ArrayList<String> saveNumberTypes = new ArrayList<String>();
         ArrayList<String> saveNumberValues = new ArrayList<String>();
         for (int i = 0; i < this.listFieldNumbers.size(); i++) {
@@ -103,12 +98,14 @@ public class AddNewActivity extends ActionBarActivity implements View.OnClickLis
             saveMiscValues.add(this.listFieldMisc.get(i).getFieldValue());
         }
         savedInstanceState.putStringArrayList(SAVE_MISC_TYPE, saveMiscTypes);
-        savedInstanceState.putStringArrayList(SAVE_MISC_VALUE, saveMiscValues);
+        savedInstanceState.putStringArrayList(SAVE_MISC_VALUE, saveMiscValues);*/
     }
 
     //Handling screen config changes
     public void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
+
+        //fragmentSerial = savedInstanceState.getInt(SAVE_FRAGMENT_SERIAL);
     }
 
     @Override
@@ -123,6 +120,7 @@ public class AddNewActivity extends ActionBarActivity implements View.OnClickLis
             case android.R.id.home:     //Up button
                 NavUtils.navigateUpFromSameTask(this);
                 return true;
+
             case R.id.menuAddNew_save:
                 if (fieldName.getText().toString().length() < 1) {
                     AlertDialog.Builder alert = new AlertDialog.Builder(this);
@@ -141,7 +139,7 @@ public class AddNewActivity extends ActionBarActivity implements View.OnClickLis
                 //save name field
                 newContact.setName(fieldName.getText().toString());
                 //set unique ID for each new contact
-                newContact.setID(db.getContactsCount());
+                newContact.setID(db.getNextAvailableID());
                 //save number fields
                 for (int iNum = 0; iNum < listFieldNumbers.size(); iNum++) {
                     String fieldType = listFieldNumbers.get(iNum).getFieldType();

@@ -40,6 +40,8 @@ public class FieldFragment extends Fragment implements View.OnClickListener {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        //Retain fragment state through configuration changes
+        setRetainInstance(true);
     }
 
     @Override

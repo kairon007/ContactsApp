@@ -18,12 +18,12 @@ import java.util.ArrayList;
 public class MainActivity extends ActionBarActivity implements ExpandableListView.OnGroupExpandListener,
         ExpandableListView.OnGroupCollapseListener {
 
-    //Widgets
+    //View components
     ExpandableListView contactsListView;
     ExpandableListAdapter contactsAdapter;
     ArrayList<Contact> contactsList;
 
-    //Saving list view states
+    //Variables to record current listview states
     int selectedGroup;
     int listViewPosition;
     int listViewOffset;
@@ -32,9 +32,6 @@ public class MainActivity extends ActionBarActivity implements ExpandableListVie
     static final String STATE_SELECTEDGROUP = "selectedgroup";
     static final String STATE_LISTVIEWPOS = "listviewpos";
     static final String STATE_LISTVIEWOFFSET = "listviewoffset";
-
-    //Saving persistent data
-    SharedPreferences sharedPrefTypes, sharedPrefValues;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,7 +68,6 @@ public class MainActivity extends ActionBarActivity implements ExpandableListVie
         savedInstanceState.putInt(STATE_SELECTEDGROUP, selectedGroup);
         savedInstanceState.putInt(STATE_LISTVIEWPOS, listViewPosition);
         savedInstanceState.putInt(STATE_LISTVIEWOFFSET, listViewOffset);
-        Log.d("saving instance", "pos " + listViewPosition + " offset " + listViewOffset);
     }
 
     @Override
@@ -89,8 +85,9 @@ public class MainActivity extends ActionBarActivity implements ExpandableListVie
     protected void onPause() {
         super.onPause();
 
-        //Called here for when leaving this activity to another activity
-        saveContactList();
+        //No need for a method to specifically save data since all actions which can be performed
+        //to change the data have their own saving process
+        //saveContactList();
     }
 
     @Override
@@ -133,9 +130,8 @@ public class MainActivity extends ActionBarActivity implements ExpandableListVie
                     Intent intentEdit = new Intent(this, EditActivity.class);
                     intentEdit.setAction(Intent.ACTION_VIEW);
                     //Send data as extras for selected contact
-                    Contact contact = contactsList.get(selectedGroup);
                     intentEdit.putExtra(getString(R.string.extra_listposition), selectedGroup);
-                    intentEdit.putExtra(getString(R.string.extra_contactparcel), contact);
+                    intentEdit.putExtra(getString(R.string.extra_contactparcel), contactsList.get(selectedGroup));
                     startActivity(intentEdit);
                 }
                 return true;
@@ -157,9 +153,7 @@ public class MainActivity extends ActionBarActivity implements ExpandableListVie
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             //Delete selected contact, update list and adapter data
-                            contactsList.remove(selectedGroup);
-                            selectedGroup = -1;
-                            saveContactList();
+                            deleteContact();
                             updateListAdapter();
                             recoverListState();
                         }
@@ -195,29 +189,29 @@ public class MainActivity extends ActionBarActivity implements ExpandableListVie
 
     private void loadContactList() {
         ContactsDataHandler db = new ContactsDataHandler(this);
-        contactsList = (ArrayList<Contact>)db.getAllContacts().clone();
-
+        contactsList = db.getAllContacts();
         db.close();
 
         updateListAdapter();
         recoverListState();
     }
 
-    //TODO - Save contacts to database
-    private void saveContactList() {
+    private void deleteContact() {
         ContactsDataHandler db = new ContactsDataHandler(this);
-
+        db.deleteContact(contactsList.get(selectedGroup));
         db.close();
+        contactsList.remove(selectedGroup);
+        selectedGroup = -1;
     }
 
-    /** Called when list view's size is changed */
+    // Called when list view's size is changed
     private void updateListAdapter() {
         contactsAdapter = new ExpandableListAdapter(this, contactsList);
         contactsListView.setAdapter(contactsAdapter);
         contactsAdapter.notifyDataSetChanged();
     }
 
-    /** Re-expand any previously expanded groups, and recover previous scroll position */
+    // Re-expand any previously expanded groups, and recover previous scroll position
     private void recoverListState() {
         if (selectedGroup >= 0) {
             contactsListView.expandGroup(selectedGroup);

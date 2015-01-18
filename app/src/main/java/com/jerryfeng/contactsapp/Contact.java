@@ -126,6 +126,17 @@ public class Contact implements Parcelable {
         this.misc.add(newField);
     }
 
+    public void removeAllNumbers() {
+        this.numbers.clear();
+    }
+
+    public void removeAllEmails() {
+        this.emails.clear();
+    }
+
+    public void removeAllMisc() {
+        this.misc.clear();
+    }
 
     public CharSequence[] getNumberValues() {
         CharSequence[] numbers = new String[this.numbers.size()];
@@ -142,6 +153,7 @@ public class Contact implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(this.id);
         dest.writeString(this.name);
         dest.writeTypedList(this.numbers);
         dest.writeTypedList(this.emails);
@@ -149,10 +161,11 @@ public class Contact implements Parcelable {
     }
 
     public Contact(Parcel in) { //Constructor for reading from parcel
+        this.id = in.readInt();
         this.name = in.readString();
-        in.readTypedList(this.numbers, Field.CREATOR);
-        in.readTypedList(this.emails, Field.CREATOR);
-        in.readTypedList(this.misc, Field.CREATOR);
+        this.numbers = in.createTypedArrayList(Field.CREATOR);
+        this.emails = in.createTypedArrayList(Field.CREATOR);
+        this.misc = in.createTypedArrayList(Field.CREATOR);
     }
 
     public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
