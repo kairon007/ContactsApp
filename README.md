@@ -3,23 +3,16 @@ ContactsApp
 
 Another experimental app for learning purposes
 
-<h2>Work in progress</h2>
+<h3>v1.0 released on <a href="https://play.google.com/store/apps/details?id=com.jerryfeng.contactsapp" target="_blank">Google Play!</a></h3>
 
-<p>Displays contact information in list form, including picture, name, phone number, and maybe more. User can create, edit, and delete contacts, as well as call and text numbers straight from the app. Contact information is saved on the device, so that the list of contacts is retained upon closing and reopening the app.</p>
+<h3>Still work in progress</h3>
 
-<h3>Implemented</h3>
+Main features are implemented and functional. I want to switch focus to other projects for now before coming back and adding more to this app.
+
+<strong>Upcoming features may include:</strong>
 <ul>
-<li>Contact card can hold name, phone number & email address</li>
-<li>Displaying data with ExpandableListView</li>
-<li>Adding contacts</li>
-<li>Editing existing contacts</li>
-<li>Deleting contacts</li>
-<li>Saving contacts as persistent data with <strong>SQLite databases</strong></li>
-<li>Retaining activity states with savedInstanceState</li>
-<li><strong>Customizable contact card fields</strong></li>
-</ul>
-
-<h3>Working on</h3>
-<ul>
-<li>Contact photos</li>
+<li>Handling screen configuration changes</li>
+<li>Contact avatar photos</li>
+<li>Better UI - animations, colours, etc.</li>
+<li>Layout compatibility with tablets</li>
 </ul>
