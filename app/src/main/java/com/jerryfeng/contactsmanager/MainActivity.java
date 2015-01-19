@@ -1,13 +1,10 @@
-package com.jerryfeng.contactsapp;
+package com.jerryfeng.contactsmanager;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -109,12 +106,13 @@ public class MainActivity extends ActionBarActivity implements ExpandableListVie
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            //Start activity for adding a new contact
             case R.id.menu_addNew:
                 Intent intentAddNew = new Intent(this, AddNewActivity.class);
                 intentAddNew.setAction(Intent.ACTION_VIEW);
                 startActivity(intentAddNew);
                 return true;
-
+            //Start activity for editing existing contact
             case R.id.menu_edit:
                 if (selectedGroup < 0) {
                     AlertDialog.Builder alertEdit = new AlertDialog.Builder(this);
@@ -135,7 +133,7 @@ public class MainActivity extends ActionBarActivity implements ExpandableListVie
                     startActivity(intentEdit);
                 }
                 return true;
-
+            //Delete selected contact
             case R.id.menu_delete:
                 AlertDialog.Builder alertDelete = new AlertDialog.Builder(this);
                 alertDelete.setTitle("Delete contact");

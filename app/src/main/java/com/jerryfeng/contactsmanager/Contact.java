@@ -1,13 +1,12 @@
-package com.jerryfeng.contactsapp;
+package com.jerryfeng.contactsmanager;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.util.Log;
 
 import java.util.ArrayList;
 
 /**
- * Custom class
+ * Class for each contact card
  */
 public class Contact implements Parcelable {
     //String imageSrc;

@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.jerryfeng.contactsapp.FieldFragment"
+    tools:context="com.jerryfeng.contactsmanager.FieldFragment"
     android:orientation="horizontal">
 
     <EditText android:id="@+id/frag_fieldType"
@@ -20,7 +20,7 @@
         android:textSize="16sp"
         android:background="@android:drawable/edit_text"/>
 
-    <TextView android:id="@+id/addNew_delete"
+    <TextView android:id="@+id/frag_delete"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"

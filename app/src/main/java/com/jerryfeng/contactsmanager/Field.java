@@ -1,10 +1,10 @@
-package com.jerryfeng.contactsapp;
+package com.jerryfeng.contactsmanager;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
 /**
- * Custom class
+ * Class for each field in contact card
  */
 public class Field implements Parcelable {
     private String type;
@@ -15,7 +15,7 @@ public class Field implements Parcelable {
         this.value = "";
     }
 
-    public Field(Parcel in) {   //Constructor for parcelling
+    public Field(Parcel in) {   //Constructor for parcel
         this.type = in.readString();
         this.value = in.readString();
     }

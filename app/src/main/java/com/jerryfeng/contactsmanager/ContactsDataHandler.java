@@ -1,15 +1,11 @@
-package com.jerryfeng.contactsapp;
+package com.jerryfeng.contactsmanager;
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.text.style.TtsSpan;
 
-import org.apache.http.conn.ConnectTimeoutException;
-
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 /**
@@ -139,7 +135,6 @@ public class ContactsDataHandler extends SQLiteOpenHelper {
     public ArrayList<Contact> getAllContacts() {    //Return all contacts stored in table
         ArrayList<Contact> list = new ArrayList<Contact>();
         int id = 0;
-        //if (getHighestID() < 0) return list;
         while(id <= getHighestID()) {
             list.add(getContact(id));
             id++;
@@ -159,6 +154,7 @@ public class ContactsDataHandler extends SQLiteOpenHelper {
         db.delete(TABLE_NAME, COL_ID + "=?", new String[] {String.valueOf(contact.getID())});
     }
 
+    //Get the lowest unused ID
     public int getNextAvailableID() {
         int id = 0;
         while(this.getContact(id) != null) {
@@ -167,6 +163,7 @@ public class ContactsDataHandler extends SQLiteOpenHelper {
         return id;
     }
 
+    //Get the highest ID currently being used
     public int getHighestID() {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = db.rawQuery("SELECT * FROM " + TABLE_NAME + " WHERE " + COL_ID

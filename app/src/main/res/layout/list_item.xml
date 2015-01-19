@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.jerryfeng.contactsapp.AddNewActivity">
+    tools:context="com.jerryfeng.contactsmanager.AddNewActivity">
 
     <TableRow android:padding="10dp">
         <ImageView android:id="@+id/list_item_image"

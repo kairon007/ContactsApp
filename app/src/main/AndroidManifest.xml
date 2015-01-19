@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.jerryfeng.contactsapp" >
+    package="com.jerryfeng.contactsmanager">
 
     <application
         android:allowBackup="true"
@@ -8,7 +8,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".MainActivity"
+            android:name="com.jerryfeng.contactsmanager.MainActivity"
             android:label="@string/title_activity_main"
             android:launchMode="singleTop" >
             <intent-filter>
@@ -18,20 +18,20 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".AddNewActivity"
+            android:name="com.jerryfeng.contactsmanager.AddNewActivity"
             android:label="@string/title_activity_add_new"
-            android:parentActivityName=".MainActivity" >
+            android:parentActivityName="com.jerryfeng.contactsmanager.MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.jerryfeng.contactsapp.MainActivity" />
+                android:value="com.jerryfeng.contactsmanager.MainActivity" />
         </activity>
         <activity
-            android:name=".EditActivity"
+            android:name="com.jerryfeng.contactsmanager.EditActivity"
             android:label="@string/title_activity_edit"
-            android:parentActivityName=".MainActivity" >
+            android:parentActivityName="com.jerryfeng.contactsmanager.MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.jerryfeng.contactsapp.MainActivity" />
+                android:value="com.jerryfeng.contactsmanager.MainActivity" />
         </activity>
     </application>
 

@@ -1,6 +1,5 @@
-package com.jerryfeng.contactsapp;
+package com.jerryfeng.contactsmanager;
 
-import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -9,19 +8,15 @@ import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ActionMenuView;
 import android.widget.BaseExpandableListAdapter;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 
 /**
- * Custom adapter for ExpandableListView
+ * Custom adapter for ExpandableListView, handles group and child views
  */
 public class ExpandableListAdapter extends BaseExpandableListAdapter implements View.OnClickListener {
 
@@ -80,7 +75,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter implements 
         if (this.contactsList.size() < 1)   return convertView;
 
         //Instantiate components
-        TextView groupHeaderView = (TextView)convertView.findViewById(R.id.list_group_textview);
+        TextView groupHeaderView = (TextView)convertView.findViewById(R.id.list_group_title);
         groupHeaderView.setText(this.contactsList.get(groupPosition).getName());
 
         return convertView;
@@ -179,6 +174,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter implements 
                         new DialogInterface.OnMultiChoiceClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+                                //Get intent for calling
                                 Intent intentCall = new Intent(Intent.ACTION_DIAL);
                                 intentCall.setData(Uri.parse("tel:" +
                                         contactsList.get(selectedGroup).getNumberValues()[which]));
@@ -202,6 +198,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter implements 
                         new DialogInterface.OnMultiChoiceClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+                                //Get intent for texting
                                 Intent intentText = new Intent(Intent.ACTION_SENDTO);
                                 intentText.setData(Uri.parse("smsto:" +
                                         contactsList.get(selectedGroup).getNumberValues()[which]));

@@ -1,9 +1,7 @@
-package com.jerryfeng.contactsapp;
+package com.jerryfeng.contactsmanager;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -11,45 +9,50 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 
-
-public class EditActivity extends ActionBarActivity implements View.OnClickListener,
+/*
+* Activity for adding a new contact card
+* */
+public class AddNewActivity extends ActionBarActivity implements View.OnClickListener,
         FieldFragment.OnFragmentDeleteListener {
 
-    //Widgets
-    ImageButton photo;
+    //View components
+    //ImageButton photo;
     EditText fieldName;
     TextView buttonAddNumber, buttonAddEmail, buttonAddMisc;
 
-    //Fragments
-    ArrayList<FieldFragment> listFieldNumbers, listFieldEmails, listFieldMisc;
-    int fragmentSerial;
+    //Fragment components
+    private ArrayList<FieldFragment> listFieldNumbers, listFieldEmails, listFieldMisc;
+    private int fragmentSerial;
 
-    //Saving persistent data
-    int listPosition;
+    //Keys for savedInstanceState
+    /*private static final String SAVE_FRAGMENT_SERIAL = "save_fragment_serial";
 
-    //Contact being edited
-    Contact contact;
+    private static final String SAVE_NUMBERS_TYPE = "save_numbers_type";
+    private static final String SAVE_NUMBERS_VALUE = "save_numbers_value";
+    private static final String SAVE_EMAILS_TYPE = "save_emails_type";
+    private static final String SAVE_EMAILS_VALUE = "save_emails_value";
+    private static final String SAVE_MISC_TYPE = "save_misc_type";
+    private static final String SAVE_MISC_VALUE = "save_misc_value";*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_edit);
+        setContentView(R.layout.activity_add_new);
 
         //Up button
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         //Instantiating components
-        fieldName = (EditText)findViewById(R.id.edit_fieldName);
-        buttonAddNumber = (TextView)findViewById(R.id.edit_addNumber);
+        fieldName = (EditText)findViewById(R.id.addNew_fieldName);
+        buttonAddNumber = (TextView)findViewById(R.id.addNew_addNumber);
         buttonAddNumber.setOnClickListener(this);
-        buttonAddEmail = (TextView)findViewById(R.id.edit_addEmail);
+        buttonAddEmail = (TextView)findViewById(R.id.addNew_addEmail);
         buttonAddEmail.setOnClickListener(this);
-        buttonAddMisc = (TextView)findViewById(R.id.edit_addMisc);
+        buttonAddMisc = (TextView)findViewById(R.id.addNew_addMisc);
         buttonAddMisc.setOnClickListener(this);
 
         //Initialize fragment components
@@ -58,85 +61,57 @@ public class EditActivity extends ActionBarActivity implements View.OnClickListe
         listFieldMisc = new ArrayList<FieldFragment>();
         fragmentSerial = 0;
 
-        //Receive intent & contact data
-        Intent intent = getIntent();
-        contact = intent.getParcelableExtra(getString(R.string.extra_contactparcel));
-        listPosition = intent.getIntExtra(getString(R.string.extra_listposition), -1);
+        //Provide initial fields
+        onClick(findViewById(R.id.addNew_addNumber));
+        onClick(findViewById(R.id.addNew_addEmail));
+        onClick(findViewById(R.id.addNew_addMisc));
 
-        //Set up existing fields
-        fieldName.setText(contact.getName());
-        for (int i = 0; i < contact.getNumbersCount(); i++) {
-            FieldFragment fieldNumber = new FieldFragment();
-            listFieldNumbers.add(fieldNumber);
-            Bundle args = new Bundle();
-            //Create and pass arguments bundle
-            args.putInt(FieldFragment.PARAM_CONTAINER, FieldFragment.CONTAINER_NUMBER);
-            args.putInt(FieldFragment.PARAM_INDEX, listFieldNumbers.size() - 1);
-            args.putString(FieldFragment.PARAM_TYPE, contact.getNumberType(i));
-            args.putString(FieldFragment.PARAM_VALUE, contact.getNumberValue(i));
-            fieldNumber.setArguments(args);
-            //Add fragment with unique tag
-            getSupportFragmentManager().beginTransaction().add(R.id.edit_numbersContainer,
-                    fieldNumber, getString(R.string.frag_tag_number) + fragmentSerial).commit();
-            fragmentSerial++;
-        }
-        for (int i = 0; i < contact.getEmailsCount(); i++) {
-            FieldFragment fieldEmail = new FieldFragment();
-            listFieldEmails.add(fieldEmail);
-            Bundle args = new Bundle();
-            //Create and pass arguments bundle
-            args.putInt(FieldFragment.PARAM_CONTAINER, FieldFragment.CONTAINER_EMAIL);
-            args.putInt(FieldFragment.PARAM_INDEX, listFieldEmails.size() - 1);
-            args.putString(FieldFragment.PARAM_TYPE, contact.getEmailType(i));
-            args.putString(FieldFragment.PARAM_VALUE, contact.getEmailValue(i));
-            fieldEmail.setArguments(args);
-            //Add fragment with unique tag
-            getSupportFragmentManager().beginTransaction().add(R.id.edit_emailsContainer,
-                    fieldEmail, getString(R.string.frag_tag_email) + fragmentSerial).commit();
-            fragmentSerial++;
-        }
-        for (int i = 0; i < contact.getMiscCount(); i++) {
-            FieldFragment fieldMisc = new FieldFragment();
-            listFieldMisc.add(fieldMisc);
-            Bundle args = new Bundle();
-            //Create and pass arguments bundle
-            args.putInt(FieldFragment.PARAM_CONTAINER, FieldFragment.CONTAINER_MISC);
-            args.putInt(FieldFragment.PARAM_INDEX, listFieldMisc.size() - 1);
-            args.putString(FieldFragment.PARAM_TYPE, contact.getMiscType(i));
-            args.putString(FieldFragment.PARAM_VALUE, contact.getMiscValue(i));
-            fieldMisc.setArguments(args);
-            //Add fragment with unique tag
-            getSupportFragmentManager().beginTransaction().add(R.id.edit_miscContainer,
-                    fieldMisc, getString(R.string.frag_tag_misc) + fragmentSerial).commit();
-            fragmentSerial++;
-        }
-        if (listFieldNumbers.size() < 1) {
-            onClick(findViewById(R.id.edit_addNumber));
-        }
-        if (listFieldEmails.size() < 1) {
-            onClick(findViewById(R.id.edit_addEmail));
-        }
-        if (listFieldMisc.size() < 1) {
-            onClick(findViewById(R.id.edit_addMisc));
-        }
     }
 
     //Handling screen config changes
     public void onSaveInstanceState(Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
+        //TODO-Implement saving instance state
+        /*
+        savedInstanceState.putInt(SAVE_FRAGMENT_SERIAL, fragmentSerial);
+        ArrayList<String> saveNumberTypes = new ArrayList<String>();
+        ArrayList<String> saveNumberValues = new ArrayList<String>();
+        for (int i = 0; i < this.listFieldNumbers.size(); i++) {
+            saveNumberTypes.add(this.listFieldNumbers.get(i).getFieldType());
+            saveNumberValues.add(this.listFieldNumbers.get(i).getFieldValue());
+        }
+        savedInstanceState.putStringArrayList(SAVE_NUMBERS_TYPE, saveNumberTypes);
+        savedInstanceState.putStringArrayList(SAVE_NUMBERS_VALUE, saveNumberValues);
 
-        //TODO - Implement saving instance state
+        ArrayList<String> saveEmailTypes = new ArrayList<String>();
+        ArrayList<String> saveEmailValues = new ArrayList<String>();
+        for (int i = 0; i < this.listFieldEmails.size(); i++) {
+            saveEmailTypes.add(this.listFieldEmails.get(i).getFieldType());
+            saveEmailValues.add(this.listFieldEmails.get(i).getFieldValue());
+        }
+        savedInstanceState.putStringArrayList(SAVE_EMAILS_TYPE, saveEmailTypes);
+        savedInstanceState.putStringArrayList(SAVE_EMAILS_VALUE, saveEmailValues);
+
+        ArrayList<String> saveMiscTypes = new ArrayList<String>();
+        ArrayList<String> saveMiscValues = new ArrayList<String>();
+        for (int i = 0; i < this.listFieldMisc.size(); i++) {
+            saveMiscTypes.add(this.listFieldMisc.get(i).getFieldType());
+            saveMiscValues.add(this.listFieldMisc.get(i).getFieldValue());
+        }
+        savedInstanceState.putStringArrayList(SAVE_MISC_TYPE, saveMiscTypes);
+        savedInstanceState.putStringArrayList(SAVE_MISC_VALUE, saveMiscValues);*/
     }
 
     //Handling screen config changes
     public void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
+
+        //fragmentSerial = savedInstanceState.getInt(SAVE_FRAGMENT_SERIAL);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_edit, menu);
+        getMenuInflater().inflate(R.menu.menu_add_new, menu);
         return true;
     }
 
@@ -146,7 +121,8 @@ public class EditActivity extends ActionBarActivity implements View.OnClickListe
             case android.R.id.home:     //Up button
                 NavUtils.navigateUpFromSameTask(this);
                 return true;
-            case R.id.menuEdit_save:
+
+            case R.id.menuAddNew_save:  //Save contact
                 if (fieldName.getText().toString().length() < 1) {
                     AlertDialog.Builder alert = new AlertDialog.Builder(this);
                     alert.setTitle("Save contact");
@@ -159,19 +135,18 @@ public class EditActivity extends ActionBarActivity implements View.OnClickListe
                     return true;
                 }
 
+                Contact newContact = new Contact();
                 ContactsDataHandler db = new ContactsDataHandler(this);
                 //save name field
-                this.contact.setName(fieldName.getText().toString());
-                //Clear fields, then save into empty contact
-                this.contact.removeAllNumbers();
-                this.contact.removeAllEmails();
-                this.contact.removeAllMisc();
+                newContact.setName(fieldName.getText().toString());
+                //set unique ID for each new contact
+                newContact.setID(db.getNextAvailableID());
                 //save number fields
                 for (int iNum = 0; iNum < listFieldNumbers.size(); iNum++) {
                     String fieldType = listFieldNumbers.get(iNum).getFieldType();
                     String fieldValue = listFieldNumbers.get(iNum).getFieldValue();
                     if (fieldType.length() > 0 && fieldValue.length() > 0) {
-                        this.contact.addNumber(fieldType, fieldValue);
+                        newContact.addNumber(fieldType, fieldValue);
                     }
                 }
                 //save email fields
@@ -179,7 +154,7 @@ public class EditActivity extends ActionBarActivity implements View.OnClickListe
                     String fieldType = listFieldEmails.get(iEm).getFieldType();
                     String fieldValue = listFieldEmails.get(iEm).getFieldValue();
                     if (fieldType.length() > 0 && fieldValue.length() > 0) {
-                        this.contact.addEmail(fieldType, fieldValue);
+                        newContact.addEmail(fieldType, fieldValue);
                     }
                 }
                 //save misc fields
@@ -187,10 +162,10 @@ public class EditActivity extends ActionBarActivity implements View.OnClickListe
                     String fieldType = listFieldMisc.get(iMisc).getFieldType();
                     String fieldValue = listFieldMisc.get(iMisc).getFieldValue();
                     if (fieldType.length() > 0 && fieldValue.length() > 0) {
-                        this.contact.addMisc(fieldType, fieldValue);
+                        newContact.addMisc(fieldType, fieldValue);
                     }
                 }
-                db.updateContact(this.contact);
+                db.addContact(newContact);
                 db.close();
 
                 finish();
@@ -202,8 +177,8 @@ public class EditActivity extends ActionBarActivity implements View.OnClickListe
     @Override
     public void onClick(View v) {
         Bundle args = new Bundle();
-        switch (v.getId()) {
-            case R.id.edit_addNumber:
+        switch (v.getId()) {    //Handling buttons for adding fields in their respective containers
+            case R.id.addNew_addNumber:
                 FieldFragment fieldNumber = new FieldFragment();
                 listFieldNumbers.add(fieldNumber);
                 //Create and pass arguments bundle
@@ -211,11 +186,11 @@ public class EditActivity extends ActionBarActivity implements View.OnClickListe
                 args.putInt(FieldFragment.PARAM_INDEX, listFieldNumbers.size() - 1);
                 fieldNumber.setArguments(args);
                 //Add fragment with unique tag
-                getSupportFragmentManager().beginTransaction().add(R.id.edit_numbersContainer,
+                getSupportFragmentManager().beginTransaction().add(R.id.addNew_numbersContainer,
                         fieldNumber, getString(R.string.frag_tag_number) + fragmentSerial).commit();
                 fragmentSerial++;
                 break;
-            case R.id.edit_addEmail:
+            case R.id.addNew_addEmail:
                 FieldFragment fieldEmail = new FieldFragment();
                 listFieldEmails.add(fieldEmail);
                 //Create and pass arguments bundle
@@ -223,11 +198,11 @@ public class EditActivity extends ActionBarActivity implements View.OnClickListe
                 args.putInt(FieldFragment.PARAM_INDEX, listFieldEmails.size() - 1);
                 fieldEmail.setArguments(args);
                 //Add fragment with unique tag
-                getSupportFragmentManager().beginTransaction().add(R.id.edit_emailsContainer,
+                getSupportFragmentManager().beginTransaction().add(R.id.addNew_emailsContainer,
                         fieldEmail, getString(R.string.frag_tag_email) + fragmentSerial).commit();
                 fragmentSerial++;
                 break;
-            case R.id.edit_addMisc:
+            case R.id.addNew_addMisc:
                 FieldFragment fieldMisc = new FieldFragment();
                 listFieldMisc.add(fieldMisc);
                 //Create and pass arguments bundle
@@ -235,7 +210,7 @@ public class EditActivity extends ActionBarActivity implements View.OnClickListe
                 args.putInt(FieldFragment.PARAM_INDEX, listFieldMisc.size() - 1);
                 fieldMisc.setArguments(args);
                 //Add fragment with unique tag
-                getSupportFragmentManager().beginTransaction().add(R.id.edit_miscContainer,
+                getSupportFragmentManager().beginTransaction().add(R.id.addNew_miscContainer,
                         fieldMisc, getString(R.string.frag_tag_misc) + fragmentSerial).commit();
                 fragmentSerial++;
                 break;

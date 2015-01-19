@@ -1,9 +1,16 @@
 apply plugin: 'com.android.application'
 
 android {
+    signingConfigs {
+        config {
+            keyAlias 'ContactsManagerKey'
+            keyPassword 'contactsapp'
+            storeFile file('/Users/Jerry/AndroidStudioProjects/keystores/ContactsManager.jks')
+            storePassword 'contactsapp'
+        }
+    }
     compileSdkVersion 21
     buildToolsVersion "21.1.2"
-
     defaultConfig {
         applicationId "com.jerryfeng.contactsapp"
         minSdkVersion 8
@@ -15,6 +22,7 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.config
         }
     }
 }

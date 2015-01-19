@@ -1,4 +1,4 @@
-package com.jerryfeng.contactsapp;
+package com.jerryfeng.contactsmanager;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -10,6 +10,10 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 
+/*
+* Fragment that displays a single field of information & allows it to be edited; used by both
+* AddNewActivity and EditActivity
+* */
 public class FieldFragment extends Fragment implements View.OnClickListener {
 
     private OnFragmentDeleteListener deleteListener;
@@ -48,7 +52,7 @@ public class FieldFragment extends Fragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_field, container, false);
 
-        //Read arguments & instantiate components
+        //Read arguments & set up input fields
         Bundle args = getArguments();
         this.containerType = args.getInt(PARAM_CONTAINER);
         this.indexInContainer = args.getInt(PARAM_INDEX);
@@ -65,8 +69,8 @@ public class FieldFragment extends Fragment implements View.OnClickListener {
         if (args.getString(PARAM_VALUE) != null) {
             fieldValue.setText(args.getString(PARAM_VALUE));
         }
-
-        deleteField = (TextView)v.findViewById(R.id.addNew_delete);
+        //Button to delete this fragment
+        deleteField = (TextView)v.findViewById(R.id.frag_delete);
         deleteField.setOnClickListener(this);
 
         //Provide suggestions for type fields, depending on the field's position in its container
@@ -117,7 +121,7 @@ public class FieldFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.addNew_delete) {
+        if (v.getId() == R.id.frag_delete) {
             if (deleteListener != null) {
                 deleteListener.onFragmentDelete(getTag());
             }
@@ -130,10 +134,6 @@ public class FieldFragment extends Fragment implements View.OnClickListener {
 
     protected int getContainerType() {
         return this.containerType;
-    }
-
-    protected int getIndexInContainer() {
-        return this.indexInContainer;
     }
 
     protected String getFieldType() {
