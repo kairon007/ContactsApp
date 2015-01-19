@@ -21,6 +21,5 @@ Another experimental app for learning purposes
 
 <h3>Working on</h3>
 <ul>
-<li>Integrating databases</li>
 <li>Contact photos</li>
 </ul>
